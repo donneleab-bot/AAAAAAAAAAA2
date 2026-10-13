@@ -1,0 +1,1668 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#050308">
+<title>Fenbo — премиальная арт-платформа</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@300;400;500;600&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* ============================================================
+   FENBO — TOKEN SYSTEM
+   ============================================================ */
+:root{
+  --void:#050308;
+  --main:#100c1f;
+  --card:#16112a;
+  --elev:#1c1634;
+
+  --gold-white:#fbf0c9;
+  --gold-glow:#f4e0a8;
+  --gold-soft:#ddc088;
+  --gold:#c9a961;
+  --gold-deep:#8f7440;
+
+  --violet-glow:#8a5ec9;
+  --violet:#5a3384;
+  --violet-deep:#2e1c44;
+
+  --crimson-glow:#d94870;
+  --crimson:#7a1f3a;
+
+  --ink:#f0e9d8;
+  --ink-mute:#7a7082;
+
+  --success:#7ba87b;
+  --danger:#c76a6a;
+
+  --sepia:#b8a878;
+
+  --radius-s:6px;
+  --radius-m:12px;
+  --radius-l:20px;
+
+  --border-soft:1px solid rgba(201,169,97,.16);
+  --border-gold:1px solid rgba(201,169,97,.42);
+
+  --shadow-card:0 10px 30px rgba(0,0,0,.45);
+  --shadow-hover:0 18px 40px rgba(0,0,0,.55), 0 0 0 1px rgba(201,169,97,.28);
+
+  --max:1400px;
+  --pad:32px;
+}
+
+/* ============================================================
+   RESET
+   ============================================================ */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  font-family:'Inter',system-ui,sans-serif;
+  background:var(--void);
+  color:var(--ink);
+  line-height:1.55;
+  font-size:15px;
+  -webkit-font-smoothing:antialiased;
+  -webkit-tap-highlight-color:transparent;
+  overflow-x:hidden;
+  position:relative;
+  min-height:100vh;
+}
+img,svg{display:block;max-width:100%}
+button{font:inherit;color:inherit;background:none;border:none;cursor:pointer}
+a{color:inherit;text-decoration:none}
+ul{list-style:none}
+
+/* ============================================================
+   BACKGROUND — static stars + vignette (no animation)
+   ============================================================ */
+body::before{
+  content:'';
+  position:fixed;inset:0;
+  background:
+    radial-gradient(1px 1px at 12% 18%, rgba(251,240,201,.55), transparent 60%),
+    radial-gradient(1px 1px at 27% 62%, rgba(251,240,201,.35), transparent 60%),
+    radial-gradient(1.4px 1.4px at 41% 12%, rgba(251,240,201,.6), transparent 60%),
+    radial-gradient(1px 1px at 56% 78%, rgba(251,240,201,.3), transparent 60%),
+    radial-gradient(1.6px 1.6px at 68% 34%, rgba(244,224,168,.7), transparent 60%),
+    radial-gradient(1px 1px at 79% 88%, rgba(251,240,201,.4), transparent 60%),
+    radial-gradient(1.2px 1.2px at 88% 22%, rgba(251,240,201,.5), transparent 60%),
+    radial-gradient(1px 1px at 8% 82%, rgba(251,240,201,.35), transparent 60%),
+    radial-gradient(1.3px 1.3px at 33% 44%, rgba(244,224,168,.45), transparent 60%),
+    radial-gradient(1px 1px at 72% 58%, rgba(251,240,201,.3), transparent 60%),
+    radial-gradient(1.5px 1.5px at 18% 38%, rgba(251,240,201,.5), transparent 60%),
+    radial-gradient(1px 1px at 94% 66%, rgba(251,240,201,.4), transparent 60%),
+    radial-gradient(ellipse 70% 50% at 50% 0%, rgba(90,51,132,.22), transparent 70%),
+    radial-gradient(ellipse 60% 40% at 50% 100%, rgba(122,31,58,.14), transparent 70%),
+    var(--main);
+  z-index:-2;
+}
+body::after{
+  content:'';
+  position:fixed;inset:0;
+  background:radial-gradient(ellipse at center, transparent 45%, rgba(5,3,8,.75) 100%);
+  pointer-events:none;
+  z-index:-1;
+}
+
+/* ============================================================
+   TYPOGRAPHY
+   ============================================================ */
+h1,h2,h3,h4{font-family:'Cormorant Garamond',serif;font-weight:600;letter-spacing:.02em;color:var(--gold-white)}
+h1{font-size:clamp(38px,5vw,64px);line-height:1.05}
+h2{font-size:clamp(28px,3.4vw,44px);line-height:1.1}
+h3{font-size:clamp(20px,2vw,26px)}
+.eyebrow{
+  font-family:'Manrope',sans-serif;
+  font-size:11px;font-weight:600;
+  letter-spacing:.32em;text-transform:uppercase;
+  color:var(--gold);
+}
+.section-head{
+  display:flex;align-items:flex-end;justify-content:space-between;
+  gap:24px;margin-bottom:36px;flex-wrap:wrap;
+}
+.section-head p{color:var(--ink-mute);max-width:520px;font-size:14px}
+
+/* ============================================================
+   LAYOUT
+   ============================================================ */
+.wrap{max-width:var(--max);margin:0 auto;padding:0 var(--pad)}
+section{padding:88px 0}
+
+/* Section divider — gold line + ✦ + roman numeral */
+.divider{
+  display:flex;align-items:center;gap:18px;
+  max-width:var(--max);margin:0 auto;padding:0 var(--pad);
+  color:var(--gold);font-size:12px;letter-spacing:.2em;
+}
+.divider::before,.divider::after{
+  content:'';flex:1;height:1px;
+  background:linear-gradient(90deg,transparent,rgba(201,169,97,.45),transparent);
+}
+.divider span{
+  font-family:'Cormorant Garamond',serif;
+  font-size:16px;color:var(--gold-glow);
+  display:flex;align-items:center;gap:10px;
+}
+.divider .roman{
+  font-family:'Manrope',sans-serif;font-size:10px;
+  letter-spacing:.3em;color:var(--gold-deep);
+}
+
+/* ============================================================
+   BUTTONS
+   ============================================================ */
+.btn{
+  display:inline-flex;align-items:center;gap:8px;
+  padding:11px 20px;border-radius:var(--radius-s);
+  font-family:'Manrope',sans-serif;
+  font-size:12.5px;font-weight:600;letter-spacing:.06em;
+  text-transform:uppercase;
+  border:1px solid rgba(201,169,97,.42);
+  color:var(--gold-white);
+  background:linear-gradient(180deg, rgba(201,169,97,.14), rgba(201,169,97,.04));
+  transition:transform .25s ease, box-shadow .25s ease, background .25s ease, border-color .25s ease;
+  white-space:nowrap;
+}
+.btn:hover{
+  transform:translateY(-2px);
+  border-color:rgba(201,169,97,.75);
+  background:linear-gradient(180deg, rgba(201,169,97,.24), rgba(201,169,97,.08));
+  box-shadow:0 10px 24px rgba(0,0,0,.45), 0 0 0 1px rgba(201,169,97,.3);
+}
+.btn-primary{
+  background:linear-gradient(180deg, var(--gold-glow), var(--gold));
+  color:#1a1226;border-color:transparent;
+}
+.btn-primary:hover{
+  background:linear-gradient(180deg, var(--gold-white), var(--gold-glow));
+  box-shadow:0 14px 30px rgba(201,169,97,.25);
+}
+.btn-ghost{
+  background:transparent;border-color:rgba(201,169,97,.22);color:var(--gold-soft);
+}
+.btn-ghost:hover{border-color:rgba(201,169,97,.6);color:var(--gold-white)}
+.btn-sm{padding:8px 14px;font-size:11px}
+
+/* ============================================================
+   HEADER
+   ============================================================ */
+.header{
+  position:sticky;top:0;z-index:100;
+  background:rgba(16,12,31,.92);
+  border-bottom:var(--border-soft);
+}
+.header-inner{
+  max-width:var(--max);margin:0 auto;
+  padding:14px var(--pad);
+  display:flex;align-items:center;gap:28px;
+}
+.logo{display:flex;align-items:center;gap:14px;flex-shrink:0}
+.logo-card{
+  width:44px;height:58px;flex-shrink:0;
+  border-radius:5px;
+  background:linear-gradient(160deg,#241a3d,#0e0a1c);
+  border:1px solid rgba(201,169,97,.5);
+  display:grid;place-items:center;
+  position:relative;
+  box-shadow:0 0 18px rgba(201,169,97,.2), inset 0 0 12px rgba(201,169,97,.08);
+}
+.logo-card::after{
+  content:'';position:absolute;inset:3px;border-radius:3px;
+  border:1px solid rgba(201,169,97,.25);
+}
+.logo-name{
+  font-family:'Cormorant Garamond',serif;
+  font-size:26px;font-weight:700;letter-spacing:.08em;
+  color:var(--gold-white);
+}
+.logo-name small{
+  display:block;font-family:'Manrope',sans-serif;
+  font-size:8.5px;letter-spacing:.4em;color:var(--gold);
+  font-weight:600;margin-top:-2px;
+}
+
+.nav{display:flex;gap:26px;margin-left:12px}
+.nav a{
+  font-size:13px;color:var(--ink-mute);
+  transition:color .2s ease;
+  position:relative;padding:4px 0;
+}
+.nav a:hover,.nav a.active{color:var(--gold-glow)}
+.nav a.active::after{
+  content:'';position:absolute;left:0;right:0;bottom:-2px;height:1px;
+  background:linear-gradient(90deg,transparent,var(--gold),transparent);
+}
+
+.header-actions{margin-left:auto;display:flex;align-items:center;gap:12px}
+.icon-btn{
+  width:38px;height:38px;border-radius:50%;
+  display:grid;place-items:center;
+  border:var(--border-soft);
+  background:rgba(22,17,42,.6);
+  position:relative;
+  transition:transform .2s ease, border-color .2s ease, background .2s ease;
+}
+.icon-btn:hover{transform:translateY(-2px);border-color:rgba(201,169,97,.5);background:var(--elev)}
+.badge{
+  position:absolute;top:-3px;right:-3px;
+  min-width:17px;height:17px;padding:0 4px;
+  border-radius:9px;background:var(--crimson-glow);
+  color:#fff;font-size:10px;font-weight:600;
+  display:grid;place-items:center;
+  border:1.5px solid var(--main);
+}
+.wallet{
+  display:flex;align-items:center;gap:8px;
+  padding:8px 14px;border-radius:var(--radius-s);
+  border:var(--border-soft);
+  background:rgba(22,17,42,.6);
+  font-family:'Manrope',sans-serif;font-size:12.5px;
+  color:var(--gold-soft);
+  transition:transform .2s ease, border-color .2s ease;
+}
+.wallet:hover{transform:translateY(-2px);border-color:rgba(201,169,97,.5)}
+.wallet b{color:var(--gold-white);font-weight:600}
+.avatar-card{
+  width:36px;height:46px;border-radius:4px;
+  border:1px solid rgba(201,169,97,.45);
+  background:linear-gradient(160deg,#2a1d45,#0e0a1c);
+  display:grid;place-items:center;
+  font-family:'Cormorant Garamond',serif;
+  font-size:13px;color:var(--gold-glow);
+  transition:transform .2s ease, border-color .2s ease;
+}
+.avatar-card:hover{transform:translateY(-2px);border-color:var(--gold)}
+.burger{display:none}
+
+/* ============================================================
+   HERO
+   ============================================================ */
+.hero{
+  position:relative;
+  padding:96px 0 72px;
+  text-align:center;
+  overflow:hidden;
+}
+.hero-bg-card{
+  position:absolute;left:50%;top:50%;
+  transform:translate(-50%,-50%) rotate(-6deg);
+  width:min(520px,80vw);opacity:.08;
+  pointer-events:none;
+}
+.hero .eyebrow{margin-bottom:20px;display:inline-block}
+.hero h1{max-width:900px;margin:0 auto 22px}
+.hero h1 em{
+  font-style:italic;color:var(--gold);
+  background:linear-gradient(180deg,var(--gold-glow),var(--gold-deep));
+  -webkit-background-clip:text;background-clip:text;color:transparent;
+}
+.hero p{
+  max-width:620px;margin:0 auto 36px;
+  color:var(--ink-mute);font-size:16px;
+}
+.hero-actions{display:flex;gap:14px;justify-content:center;flex-wrap:wrap}
+.hero-stats{
+  margin-top:64px;
+  display:flex;justify-content:center;gap:56px;flex-wrap:wrap;
+}
+.hero-stat{text-align:center}
+.hero-stat b{
+  display:block;font-family:'Manrope',sans-serif;
+  font-size:28px;color:var(--gold-white);font-weight:700;
+}
+.hero-stat span{font-size:11.5px;color:var(--ink-mute);letter-spacing:.14em;text-transform:uppercase}
+
+/* ============================================================
+   LIVE AUCTIONS
+   ============================================================ */
+.live-grid{
+  display:grid;
+  grid-template-columns:1.55fr 1fr 1fr;
+  gap:22px;
+  align-items:stretch;
+}
+.live-main{
+  grid-row:span 2;
+  display:flex;flex-direction:column;
+  padding:26px;
+}
+.live-side{display:flex;flex-direction:column;gap:18px}
+
+.panel{
+  background:linear-gradient(160deg, rgba(28,22,52,.85), rgba(16,12,31,.9));
+  border:var(--border-soft);
+  border-radius:var(--radius-m);
+  box-shadow:var(--shadow-card);
+  transition:transform .3s ease, box-shadow .3s ease, border-color .3s ease;
+}
+.panel:hover{
+  transform:translateY(-4px);
+  border-color:rgba(201,169,97,.4);
+  box-shadow:var(--shadow-hover);
+}
+
+.live-badge{
+  display:inline-flex;align-items:center;gap:7px;
+  padding:5px 11px;border-radius:100px;
+  background:rgba(217,72,112,.14);
+  border:1px solid rgba(217,72,112,.5);
+  color:var(--crimson-glow);
+  font-size:10.5px;font-weight:600;letter-spacing:.18em;
+  text-transform:uppercase;
+  align-self:flex-start;
+}
+.live-dot{
+  width:6px;height:6px;border-radius:50%;background:var(--crimson-glow);
+  box-shadow:0 0 8px var(--crimson-glow);
+}
+.live-main h3{margin:18px 0 6px;font-size:26px}
+.live-main .artist{color:var(--ink-mute);font-size:13px;margin-bottom:22px}
+.live-image{
+  flex:1;min-height:260px;
+  border-radius:var(--radius-s);
+  background:
+    radial-gradient(ellipse at 50% 40%, rgba(201,169,97,.16), transparent 65%),
+    linear-gradient(160deg,#1d1533,#0d0a1a);
+  border:1px solid rgba(201,169,97,.2);
+  display:grid;place-items:center;
+  margin-bottom:22px;
+  position:relative;overflow:hidden;
+}
+.live-image svg{width:min(220px,60%);opacity:.85}
+
+.bid-info{
+  display:grid;grid-template-columns:1fr 1fr;gap:14px;
+  margin-bottom:20px;
+}
+.bid-box{
+  padding:12px 14px;border-radius:var(--radius-s);
+  background:rgba(5,3,8,.5);
+  border:var(--border-soft);
+}
+.bid-box span{font-size:10.5px;color:var(--ink-mute);letter-spacing:.14em;text-transform:uppercase}
+.bid-box b{
+  display:block;font-family:'Manrope',sans-serif;
+  font-size:20px;color:var(--gold-white);margin-top:4px;
+}
+.bid-box .timer{color:var(--crimson-glow)}
+
+.mini-lot{
+  display:flex;gap:14px;padding:14px;
+  align-items:center;
+}
+.mini-thumb{
+  width:64px;height:80px;flex-shrink:0;
+  border-radius:4px;
+  background:linear-gradient(160deg,#241a3d,#0d0a1a);
+  border:1px solid rgba(201,169,97,.28);
+  display:grid;place-items:center;
+}
+.mini-thumb svg{width:36px;opacity:.8}
+.mini-info{flex:1;min-width:0}
+.mini-info h4{
+  font-family:'Manrope',sans-serif;
+  font-size:14px;font-weight:600;color:var(--gold-white);
+  margin-bottom:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+}
+.mini-info .meta{font-size:11.5px;color:var(--ink-mute);display:flex;gap:10px;flex-wrap:wrap}
+.mini-price{
+  font-family:'Manrope',sans-serif;font-size:14px;
+  color:var(--gold-glow);font-weight:600;
+  text-align:right;flex-shrink:0;
+}
+.mini-price small{display:block;font-size:10.5px;color:var(--ink-mute);font-weight:400}
+
+.bid-feed{padding:20px;display:flex;flex-direction:column;gap:14px}
+.bid-feed h4{
+  font-family:'Manrope',sans-serif;font-size:12px;
+  letter-spacing:.2em;text-transform:uppercase;
+  color:var(--gold);margin-bottom:6px;
+}
+.bid-row{
+  display:flex;align-items:center;gap:12px;
+  padding-bottom:12px;
+  border-bottom:1px solid rgba(201,169,97,.08);
+}
+.bid-row:last-child{border-bottom:none;padding-bottom:0}
+.bid-ava{
+  width:30px;height:38px;border-radius:3px;flex-shrink:0;
+  background:linear-gradient(160deg,#2a1d45,#0e0a1c);
+  border:1px solid rgba(201,169,97,.35);
+  display:grid;place-items:center;
+  font-family:'Cormorant Garamond',serif;font-size:11px;
+  color:var(--gold-glow);
+}
+.bid-row .who{flex:1;min-width:0}
+.bid-row .who b{display:block;font-size:12.5px;color:var(--gold-white);font-weight:500}
+.bid-row .who span{font-size:10.5px;color:var(--ink-mute)}
+.bid-row .amount{
+  font-family:'Manrope',sans-serif;font-size:13px;
+  color:var(--gold-glow);font-weight:600;
+}
+
+/* ============================================================
+   TAROT CARDS
+   ============================================================ */
+.tarot-grid{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:22px;
+}
+.tarot-card{
+  position:relative;
+  border-radius:var(--radius-m);
+  background:linear-gradient(165deg, rgba(28,22,52,.9), rgba(13,10,26,.95));
+  border:1px solid rgba(201,169,97,.22);
+  box-shadow:var(--shadow-card);
+  padding:16px;
+  display:flex;flex-direction:column;
+  transition:transform .3s ease, box-shadow .3s ease, border-color .3s ease;
+}
+.tarot-card::before{
+  content:'';position:absolute;inset:6px;border-radius:8px;
+  border:1px solid rgba(201,169,97,.12);
+  pointer-events:none;
+}
+.tarot-card:hover{
+  transform:translateY(-6px);
+  border-color:rgba(201,169,97,.55);
+  box-shadow:var(--shadow-hover);
+}
+.tarot-card .corner{
+  position:absolute;width:10px;height:10px;
+  border-color:rgba(201,169,97,.4);border-style:solid;border-width:0;
+}
+.corner.tl{top:10px;left:10px;border-top-width:1px;border-left-width:1px}
+.corner.tr{top:10px;right:10px;border-top-width:1px;border-right-width:1px}
+.corner.bl{bottom:10px;left:10px;border-bottom-width:1px;border-left-width:1px}
+.corner.br{bottom:10px;right:10px;border-bottom-width:1px;border-right-width:1px}
+
+.tarot-num{
+  display:flex;align-items:center;gap:10px;
+  font-family:'Manrope',sans-serif;font-size:10.5px;
+  letter-spacing:.28em;color:var(--gold-deep);
+  text-transform:uppercase;margin-bottom:12px;
+}
+.tarot-num::before,.tarot-num::after{
+  content:'';flex:1;height:1px;background:rgba(201,169,97,.2);
+}
+.tarot-num b{color:var(--gold);font-weight:600}
+
+.tarot-scene{
+  aspect-ratio:3/4;
+  border-radius:var(--radius-s);
+  background:
+    radial-gradient(ellipse at 50% 35%, rgba(201,169,97,.14), transparent 70%),
+    linear-gradient(165deg,#1e1636,#0c0918);
+  border:1px solid rgba(201,169,97,.2);
+  position:relative;overflow:hidden;
+  display:grid;place-items:center;
+  margin-bottom:14px;
+}
+.tarot-scene::after{
+  content:'';position:absolute;inset:8px;border-radius:4px;
+  border:1px dashed rgba(201,169,97,.14);
+  pointer-events:none;
+}
+.tarot-scene svg{width:78%;height:78%;opacity:.9}
+
+.tarot-title{
+  font-family:'Cormorant Garamond',serif;
+  font-size:20px;font-weight:600;
+  color:var(--gold-white);text-align:center;
+  letter-spacing:.08em;
+}
+.tarot-sub{
+  font-size:11.5px;color:var(--ink-mute);
+  text-align:center;margin-bottom:12px;
+}
+.tarot-meta{
+  display:grid;grid-template-columns:repeat(3,1fr);
+  gap:1px;background:rgba(201,169,97,.12);
+  border-radius:4px;overflow:hidden;
+  margin-bottom:14px;
+}
+.tarot-meta div{
+  background:rgba(5,3,8,.5);
+  padding:8px 6px;text-align:center;
+}
+.tarot-meta b{
+  display:block;font-family:'Manrope',sans-serif;
+  font-size:14px;color:var(--gold-white);font-weight:600;
+}
+.tarot-meta span{font-size:9.5px;color:var(--ink-mute);letter-spacing:.1em;text-transform:uppercase}
+
+.tarot-foot{
+  display:flex;align-items:center;justify-content:space-between;
+  gap:12px;margin-top:auto;
+}
+.tarot-price{
+  font-family:'Manrope',sans-serif;
+  font-size:17px;font-weight:700;color:var(--gold-glow);
+}
+.tarot-price small{font-size:11px;color:var(--ink-mute);font-weight:400;display:block}
+
+/* ============================================================
+   SLOTS
+   ============================================================ */
+.slot-grid{
+  display:grid;grid-template-columns:repeat(3,1fr);gap:22px;
+}
+.slot-card{
+  background:linear-gradient(165deg, rgba(28,22,52,.9), rgba(13,10,26,.95));
+  border:1px solid rgba(201,169,97,.22);
+  border-radius:var(--radius-m);
+  box-shadow:var(--shadow-card);
+  padding:20px;
+  display:flex;flex-direction:column;gap:14px;
+  transition:transform .3s ease, box-shadow .3s ease, border-color .3s ease;
+}
+.slot-card:hover{
+  transform:translateY(-5px);
+  border-color:rgba(201,169,97,.5);
+  box-shadow:var(--shadow-hover);
+}
+.slot-head{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
+.slot-head h4{
+  font-family:'Manrope',sans-serif;font-size:16px;
+  font-weight:600;color:var(--gold-white);
+}
+.slot-head .author{font-size:11.5px;color:var(--ink-mute);margin-top:2px}
+.status{
+  font-size:10px;font-weight:600;letter-spacing:.14em;
+  text-transform:uppercase;padding:4px 9px;border-radius:100px;
+  white-space:nowrap;
+}
+.status.open{color:var(--success);background:rgba(123,168,123,.12);border:1px solid rgba(123,168,123,.4)}
+.status.busy{color:var(--danger);background:rgba(199,106,106,.12);border:1px solid rgba(199,106,106,.4)}
+
+.slot-scene{
+  aspect-ratio:16/9;border-radius:var(--radius-s);
+  background:
+    radial-gradient(ellipse at 50% 40%, rgba(201,169,97,.12), transparent 70%),
+    linear-gradient(165deg,#1e1636,#0c0918);
+  border:1px solid rgba(201,169,97,.18);
+  display:grid;place-items:center;overflow:hidden;
+}
+.slot-scene svg{width:60%;opacity:.85}
+
+.slot-seats{display:flex;align-items:center;gap:10px}
+.seat{
+  width:26px;height:26px;border-radius:50%;
+  border:1px solid rgba(201,169,97,.35);
+  display:grid;place-items:center;
+  font-size:10px;color:var(--ink-mute);
+  background:rgba(5,3,8,.4);
+}
+.seat.free{
+  border-color:var(--gold);
+  background:radial-gradient(circle, rgba(201,169,97,.28), rgba(201,169,97,.06));
+  box-shadow:0 0 10px rgba(201,169,97,.28);
+}
+.seat.free::after{content:'';width:6px;height:6px;border-radius:50%;background:var(--gold-glow)}
+.slot-seats span{font-size:11.5px;color:var(--ink-mute);margin-left:4px}
+
+.slot-stats{
+  display:flex;gap:18px;
+  padding-top:12px;border-top:1px solid rgba(201,169,97,.1);
+}
+.slot-stats div{font-size:11.5px;color:var(--ink-mute)}
+.slot-stats b{
+  display:block;font-family:'Manrope',sans-serif;
+  font-size:15px;color:var(--gold-white);font-weight:600;
+}
+
+/* ============================================================
+   TRUST
+   ============================================================ */
+.trust-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:20px}
+.trust-card{
+  padding:26px 22px;
+  background:linear-gradient(165deg, rgba(28,22,52,.7), rgba(13,10,26,.9));
+  border:1px solid rgba(201,169,97,.18);
+  border-radius:var(--radius-m);
+  transition:transform .3s ease, border-color .3s ease, box-shadow .3s ease;
+}
+.trust-card:hover{
+  transform:translateY(-5px);
+  border-color:rgba(201,169,97,.45);
+  box-shadow:var(--shadow-hover);
+}
+.trust-icon{
+  width:44px;height:44px;border-radius:50%;
+  border:1px solid rgba(201,169,97,.4);
+  display:grid;place-items:center;
+  background:radial-gradient(circle, rgba(201,169,97,.12), transparent 70%);
+  margin-bottom:16px;
+}
+.trust-card h4{
+  font-family:'Manrope',sans-serif;
+  font-size:15px;font-weight:600;color:var(--gold-white);
+  margin-bottom:8px;
+}
+.trust-card p{font-size:12.5px;color:var(--ink-mute);line-height:1.6}
+
+/* ============================================================
+   GALLERY
+   ============================================================ */
+.gallery-filters{
+  display:flex;flex-wrap:wrap;gap:10px;align-items:center;
+  margin-bottom:28px;
+}
+.chip{
+  padding:7px 15px;border-radius:100px;
+  font-size:12px;color:var(--ink-mute);
+  border:1px solid rgba(201,169,97,.2);
+  background:rgba(22,17,42,.5);
+  transition:color .2s ease, border-color .2s ease, background .2s ease, transform .2s ease;
+}
+.chip:hover{transform:translateY(-2px);border-color:rgba(201,169,97,.5);color:var(--gold-soft)}
+.chip.active{
+  color:var(--gold-white);
+  border-color:rgba(201,169,97,.7);
+  background:linear-gradient(180deg, rgba(201,169,97,.2), rgba(201,169,97,.06));
+}
+.nsfw-toggle{
+  margin-left:auto;display:flex;align-items:center;gap:10px;
+  font-size:12px;color:var(--ink-mute);
+}
+.switch{
+  width:38px;height:20px;border-radius:100px;
+  background:rgba(5,3,8,.6);
+  border:1px solid rgba(201,169,97,.3);
+  position:relative;cursor:pointer;
+  transition:background .2s ease;
+}
+.switch::after{
+  content:'';position:absolute;top:2px;left:2px;
+  width:14px;height:14px;border-radius:50%;
+  background:var(--gold-deep);
+  transition:transform .2s ease, background .2s ease;
+}
+.switch.on{background:rgba(201,169,97,.25)}
+.switch.on::after{transform:translateX(18px);background:var(--gold-glow)}
+
+.gallery-grid{
+  display:grid;grid-template-columns:repeat(4,1fr);gap:18px;
+}
+.gallery-item{
+  position:relative;border-radius:var(--radius-m);overflow:hidden;
+  border:1px solid rgba(201,169,97,.18);
+  background:linear-gradient(165deg,#1a1330,#0c0918);
+  aspect-ratio:3/4;
+  transition:transform .3s ease, border-color .3s ease, box-shadow .3s ease;
+  cursor:pointer;
+}
+.gallery-item:hover{
+  transform:translateY(-5px);
+  border-color:rgba(201,169,97,.5);
+  box-shadow:var(--shadow-hover);
+}
+.gallery-item svg{
+  position:absolute;inset:0;width:100%;height:100%;
+  padding:14%;opacity:.75;
+}
+.gallery-overlay{
+  position:absolute;left:0;right:0;bottom:0;
+  padding:16px;
+  background:linear-gradient(0deg, rgba(5,3,8,.95), transparent);
+}
+.gallery-overlay h5{
+  font-family:'Manrope',sans-serif;font-size:13px;
+  font-weight:600;color:var(--gold-white);
+}
+.gallery-overlay span{font-size:11px;color:var(--ink-mute)}
+.gallery-tag{
+  position:absolute;top:12px;right:12px;
+  font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;
+  padding:4px 8px;border-radius:3px;
+  background:rgba(5,3,8,.7);
+  border:1px solid rgba(201,169,97,.3);
+  color:var(--gold-soft);
+}
+
+/* ============================================================
+   FOOTER
+   ============================================================ */
+.footer{
+  border-top:var(--border-soft);
+  padding:56px 0 32px;
+  margin-top:40px;
+}
+.footer-grid{
+  display:grid;grid-template-columns:1.4fr 1fr 1fr 1fr;
+  gap:40px;margin-bottom:40px;
+}
+.footer-brand p{
+  font-size:12.5px;color:var(--ink-mute);
+  margin-top:14px;max-width:280px;line-height:1.7;
+}
+.footer h5{
+  font-family:'Manrope',sans-serif;font-size:11px;
+  letter-spacing:.24em;text-transform:uppercase;
+  color:var(--gold);margin-bottom:16px;
+}
+.footer ul li{margin-bottom:9px}
+.footer ul a{
+  font-size:13px;color:var(--ink-mute);
+  transition:color .2s ease;
+}
+.footer ul a:hover{color:var(--gold-glow)}
+.footer-bottom{
+  border-top:1px solid rgba(201,169,97,.1);
+  padding-top:24px;
+  display:flex;justify-content:space-between;align-items:center;
+  gap:20px;flex-wrap:wrap;
+  font-size:11.5px;color:var(--ink-mute);
+}
+.footer-bottom .ornament{color:var(--gold-deep);letter-spacing:.4em}
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+@media (max-width:1400px){
+  :root{--pad:24px}
+  section{padding:72px 0}
+  .tarot-grid{grid-template-columns:repeat(4,1fr);gap:18px}
+}
+
+@media (max-width:1100px){
+  .nav{display:none}
+  .burger{display:grid}
+  .live-grid{grid-template-columns:1fr 1fr}
+  .live-main{grid-column:span 2;grid-row:auto}
+  .tarot-grid{grid-template-columns:repeat(3,1fr)}
+  .trust-grid{grid-template-columns:repeat(2,1fr)}
+  .gallery-grid{grid-template-columns:repeat(3,1fr)}
+  .footer-grid{grid-template-columns:1fr 1fr}
+}
+
+@media (max-width:700px){
+  :root{--pad:16px}
+  section{padding:56px 0}
+  .hero{padding:64px 0 48px}
+  .hero-stats{gap:32px}
+  .live-grid{grid-template-columns:1fr}
+  .live-main{grid-column:auto}
+  .tarot-grid{grid-template-columns:1fr}
+  .slot-grid{grid-template-columns:1fr}
+  .trust-grid{grid-template-columns:1fr}
+  .gallery-grid{grid-template-columns:repeat(2,1fr)}
+  .footer-grid{grid-template-columns:1fr;gap:28px}
+  .header-actions .wallet{display:none}
+  .bid-info{grid-template-columns:1fr}
+}
+
+@media (max-width:400px){
+  body{font-size:14px}
+  .gallery-grid{grid-template-columns:1fr}
+  .hero-actions{flex-direction:column;align-items:stretch}
+  .hero-actions .btn{justify-content:center}
+  .tarot-meta{grid-template-columns:repeat(3,1fr)}
+}
+
+/* ============================================================
+   REDUCED MOTION
+   ============================================================ */
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{
+    animation-duration:.001ms !important;
+    animation-iteration-count:1 !important;
+    transition-duration:.001ms !important;
+    scroll-behavior:auto !important;
+  }
+}
+</style>
+</head>
+<body>
+
+<!-- ============================================================
+     SVG SPRITE — TAROT SCENES & ICONS
+     ============================================================ -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+<defs>
+
+<!-- ICON: bell -->
+<symbol id="i-bell" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M18 8a6 6 0 1 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/>
+  <path d="M13.7 21a2 2 0 0 1-3.4 0"/>
+</symbol>
+
+<!-- ICON: wallet -->
+<symbol id="i-wallet" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M20 12V8H6a2 2 0 0 1 0-4h12v4"/>
+  <path d="M4 6v12a2 2 0 0 0 2 2h14v-4"/>
+  <path d="M18 12a2 2 0 0 0 0 4h4v-4z"/>
+</symbol>
+
+<!-- ICON: shield / escrow -->
+<symbol id="i-shield" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+  <path d="M9 12l2 2 4-4"/>
+</symbol>
+
+<!-- ICON: timer / anti-sniper -->
+<symbol id="i-timer" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">
+  <circle cx="12" cy="13" r="8"/>
+  <path d="M12 9v4l2.5 2.5"/>
+  <path d="M9 2h6"/>
+</symbol>
+
+<!-- ICON: eye / anti-AI -->
+<symbol id="i-eye" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7S1 12 1 12z"/>
+  <circle cx="12" cy="12" r="3"/>
+</symbol>
+
+<!-- ICON: scale / dmca -->
+<symbol id="i-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M12 3v18"/>
+  <path d="M5 7h14"/>
+  <path d="M5 7l-3 7h6z"/>
+  <path d="M19 7l-3 7h6z"/>
+  <path d="M8 21h8"/>
+</symbol>
+
+<!-- TAROT SCENE: STAR -->
+<symbol id="s-star" viewBox="0 0 200 260">
+  <g fill="none" stroke="#b8a878" stroke-width="1" opacity=".65">
+    <circle cx="100" cy="120" r="58" opacity=".3"/>
+    <circle cx="100" cy="120" r="42" opacity=".25"/>
+    <circle cx="100" cy="120" r="26" opacity=".2"/>
+    <path d="M100 20v40M100 180v40M30 120h40M130 120h40M50 70l28 28M122 142l28 28M150 70l-28 28M78 142l-28 28" opacity=".5"/>
+    <path d="M100 62l14 28 30 4-22 21 6 30-28-15-28 15 6-30-22-21 30-4z" opacity=".85"/>
+    <path d="M100 74l10 20 22 3-16 15 4 22-20-11-20 11 4-22-16-15 22-3z" opacity=".7"/>
+    <circle cx="100" cy="120" r="8" opacity=".9"/>
+    <circle cx="100" cy="120" r="4" opacity=".9"/>
+    <path d="M92 116l4-4M108 116l-4-4M96 124h8" opacity=".8"/>
+    <circle cx="60" cy="60" r="1.5"/><circle cx="140" cy="60" r="1.5"/>
+    <circle cx="60" cy="180" r="1.5"/><circle cx="140" cy="180" r="1.5"/>
+    <circle cx="100" cy="30" r="1.5"/><circle cx="100" cy="210" r="1.5"/>
+    <circle cx="40" cy="120" r="1.5"/><circle cx="160" cy="120" r="1.5"/>
+    <path d="M60 60l40 60M140 60l-40 60M60 180l40-60M140 180l-40-60" opacity=".2" stroke-dasharray="2 4"/>
+  </g>
+</symbol>
+
+<!-- TAROT SCENE: MOON -->
+<symbol id="s-moon" viewBox="0 0 200 260">
+  <g fill="none" stroke="#b8a878" stroke-width="1" opacity=".65">
+    <circle cx="100" cy="120" r="58" opacity=".3"/>
+    <circle cx="100" cy="120" r="44" opacity=".2"/>
+    <path d="M118 80a42 42 0 1 0 0 80 34 34 0 1 1 0-80z" opacity=".9"/>
+    <path d="M112 96a30 30 0 1 0 0 48 24 24 0 1 1 0-48z" opacity=".6"/>
+    <circle cx="128" cy="104" r="4" opacity=".7"/>
+    <circle cx="136" cy="120" r="3" opacity=".7"/>
+    <circle cx="128" cy="136" r="4" opacity=".7"/>
+    <circle cx="140" cy="112" r="2" opacity=".6"/>
+    <circle cx="142" cy="128" r="2.5" opacity=".6"/>
+    <path d="M50 170q10-10 20 0t20 0 20 0 20 0 20 0" opacity=".5"/>
+    <path d="M50 184q10-10 20 0t20 0 20 0 20 0 20 0" opacity=".4"/>
+    <path d="M50 198q10-10 20 0t20 0 20 0 20 0 20 0" opacity=".3"/>
+    <circle cx="60" cy="70" r="1.5"/><circle cx="140" cy="70" r="1.5"/>
+    <circle cx="70" cy="200" r="1.5"/><circle cx="130" cy="200" r="1.5"/>
+    <circle cx="100" cy="40" r="1.5"/><circle cx="100" cy="220" r="1.5"/>
+    <path d="M60 70l40 50M140 70l-40 50" opacity=".2" stroke-dasharray="2 4"/>
+  </g>
+</symbol>
+
+<!-- TAROT SCENE: SUN -->
+<symbol id="s-sun" viewBox="0 0 200 260">
+  <g fill="none" stroke="#b8a878" stroke-width="1" opacity=".65">
+    <circle cx="100" cy="120" r="58" opacity=".3"/>
+    <circle cx="100" cy="120" r="44" opacity=".22"/>
+    <circle cx="100" cy="120" r="30" opacity=".9"/>
+    <circle cx="100" cy="120" r="22" opacity=".6"/>
+    <g opacity=".7">
+      <path d="M100 62v-12M100 178v12M42 120h-12M158 120h12"/>
+      <path d="M60 80l-8-8M140 80l8-8M60 160l-8 8M140 160l8 8"/>
+      <path d="M72 68l-4-10M128 68l4-10M72 172l-4 10M128 172l4 10"/>
+    </g>
+    <circle cx="92" cy="114" r="3"/><circle cx="108" cy="114" r="3"/>
+    <path d="M94 128q6 6 12 0" opacity=".8"/>
+    <path d="M86 108q6-6 12 0M102 108q6-6 12 0" opacity=".5"/>
+    <circle cx="100" cy="120" r="8" opacity=".3"/>
+    <circle cx="60" cy="60" r="1.5"/><circle cx="140" cy="60" r="1.5"/>
+    <circle cx="60" cy="180" r="1.5"/><circle cx="140" cy="180" r="1.5"/>
+    <circle cx="100" cy="30" r="1.5"/><circle cx="100" cy="210" r="1.5"/>
+    <path d="M60 60l40 60M140 60l-40 60M60 180l40-60M140 180l-40-60" opacity=".2" stroke-dasharray="2 4"/>
+  </g>
+</symbol>
+
+<!-- TAROT SCENE: WHEEL -->
+<symbol id="s-wheel" viewBox="0 0 200 260">
+  <g fill="none" stroke="#b8a878" stroke-width="1" opacity=".65">
+    <circle cx="100" cy="120" r="58" opacity=".3"/>
+    <circle cx="100" cy="120" r="48" opacity=".35"/>
+    <circle cx="100" cy="120" r="36" opacity=".5"/>
+    <circle cx="100" cy="120" r="24" opacity=".7"/>
+    <circle cx="100" cy="120" r="10" opacity=".9"/>
+    <g opacity=".6">
+      <path d="M100 72v96M52 120h96M66 86l68 68M134 86l-68 68"/>
+    </g>
+    <g opacity=".5">
+      <path d="M100 84v-8M100 164v8M64 120h-8M144 120h8"/>
+      <path d="M74 94l-6-6M126 94l6-6M74 146l-6 6M126 146l6 6"/>
+    </g>
+    <path d="M92 120h16M100 112v16" opacity=".8"/>
+    <circle cx="60" cy="60" r="1.5"/><circle cx="140" cy="60" r="1.5"/>
+    <circle cx="60" cy="180" r="1.5"/><circle cx="140" cy="180" r="1.5"/>
+    <circle cx="100" cy="30" r="1.5"/><circle cx="100" cy="210" r="1.5"/>
+    <path d="M60 60l40 60M140 60l-40 60M60 180l40-60M140 180l-40-60" opacity=".2" stroke-dasharray="2 4"/>
+  </g>
+</symbol>
+
+<!-- TAROT SCENE: TOWER -->
+<symbol id="s-tower" viewBox="0 0 200 260">
+  <g fill="none" stroke="#b8a878" stroke-width="1" opacity=".65">
+    <circle cx="100" cy="120" r="58" opacity=".3"/>
+    <path d="M78 60h44v70H78z" opacity=".8"/>
+    <path d="M72 60h56l-4-12H76z" opacity=".7"/>
+    <path d="M84 48h32l-4-10H88z" opacity=".6"/>
+    <path d="M78 130h44l-6 60H84z" opacity=".7"/>
+    <path d="M84 190h32l-4 14H88z" opacity=".6"/>
+    <path d="M92 78h16v22H92z" opacity=".7"/>
+    <path d="M96 86h8v14h-8z" opacity=".9"/>
+    <path d="M100 40l-8 18h16z" opacity=".8"/>
+    <path d="M88 34l-6 14M112 34l6 14" opacity=".6"/>
+    <circle cx="60" cy="60" r="1.5"/><circle cx="140" cy="60" r="1.5"/>
+    <circle cx="60" cy="180" r="1.5"/><circle cx="140" cy="180" r="1.5"/>
+    <circle cx="100" cy="30" r="1.5"/><circle cx="100" cy="210" r="1.5"/>
+    <path d="M60 60l40 60M140 60l-40 60M60 180l40-60M140 180l-40-60" opacity=".2" stroke-dasharray="2 4"/>
+  </g>
+</symbol>
+
+<!-- TAROT SCENE: SWORD -->
+<symbol id="s-sword" viewBox="0 0 200 260">
+  <g fill="none" stroke="#b8a878" stroke-width="1" opacity=".65">
+    <circle cx="100" cy="120" r="58" opacity=".3"/>
+    <path d="M100 40l6 90h-12z" opacity=".85"/>
+    <path d="M100 50l4 80h-8z" opacity=".5"/>
+    <path d="M88 130h24v6H88z" opacity=".8"/>
+    <path d="M84 136h32v4H84z" opacity=".7"/>
+    <path d="M94 140h12v40H94z" opacity=".8"/>
+    <path d="M90 180h20v6H90z" opacity=".7"/>
+    <path d="M96 186h8v12h-8z" opacity=".8"/>
+    <circle cx="100" cy="204" r="4" opacity=".9"/>
+    <path d="M100 34l-6 12h12z" opacity=".8"/>
+    <circle cx="60" cy="60" r="1.5"/><circle cx="140" cy="60" r="1.5"/>
+    <circle cx="60" cy="180" r="1.5"/><circle cx="140" cy="180" r="1.5"/>
+    <circle cx="100" cy="30" r="1.5"/><circle cx="100" cy="210" r="1.5"/>
+    <path d="M60 60l40 60M140 60l-40 60M60 180l40-60M140 180l-40-60" opacity=".2" stroke-dasharray="2 4"/>
+  </g>
+</symbol>
+
+<!-- TAROT SCENE: CUP -->
+<symbol id="s-cup" viewBox="0 0 200 260">
+  <g fill="none" stroke="#b8a878" stroke-width="1" opacity=".65">
+    <circle cx="100" cy="120" r="58" opacity=".3"/>
+    <path d="M74 80h52v30q0 24-26 24t-26-24z" opacity=".85"/>
+    <path d="M80 86h40v24q0 18-20 18t-20-18z" opacity=".5"/>
+    <path d="M88 134h24v10H88z" opacity=".8"/>
+    <path d="M92 144h16v22H92z" opacity=".7"/>
+    <path d="M84 166h32v6H84z" opacity=".8"/>
+    <path d="M88 172h24v6H88z" opacity=".6"/>
+    <circle cx="100" cy="76" r="6" opacity=".9"/>
+    <circle cx="100" cy="76" r="3" opacity=".7"/>
+    <path d="M70 66q10-12 20 0M110 66q10-12 20 0" opacity=".5"/>
+    <circle cx="60" cy="60" r="1.5"/><circle cx="140" cy="60" r="1.5"/>
+    <circle cx="60" cy="180" r="1.5"/><circle cx="140" cy="180" r="1.5"/>
+    <circle cx="100" cy="30" r="1.5"/><circle cx="100" cy="210" r="1.5"/>
+    <path d="M60 60l40 60M140 60l-40 60M60 180l40-60M140 180l-40-60" opacity=".2" stroke-dasharray="2 4"/>
+  </g>
+</symbol>
+
+<!-- TAROT SCENE: PENTACLE -->
+<symbol id="s-pentacle" viewBox="0 0 200 260">
+  <g fill="none" stroke="#b8a878" stroke-width="1" opacity=".65">
+    <circle cx="100" cy="120" r="58" opacity=".3"/>
+    <circle cx="100" cy="120" r="50" opacity=".4"/>
+    <circle cx="100" cy="120" r="40" opacity=".5"/>
+    <path d="M100 72l14 44 46 0-37 27 14 44-37-27-37 27 14-44-37-27 46 0z" opacity=".85"/>
+    <path d="M100 84l11 34 36 0-29 21 11 34-29-21-29 21 11-34-29-21 36 0z" opacity=".5"/>
+    <circle cx="100" cy="120" r="6" opacity=".8"/>
+    <circle cx="60" cy="60" r="1.5"/><circle cx="140" cy="60" r="1.5"/>
+    <circle cx="60" cy="180" r="1.5"/><circle cx="140" cy="180" r="1.5"/>
+    <circle cx="100" cy="30" r="1.5"/><circle cx="100" cy="210" r="1.5"/>
+    <path d="M60 60l40 60M140 60l-40 60M60 180l40-60M140 180l-40-60" opacity=".2" stroke-dasharray="2 4"/>
+  </g>
+</symbol>
+
+<!-- TAROT SCENE: LOVERS -->
+<symbol id="s-lovers" viewBox="0 0 200 260">
+  <g fill="none" stroke="#b8a878" stroke-width="1" opacity=".65">
+    <circle cx="100" cy="120" r="58" opacity=".3"/>
+    <circle cx="100" cy="80" r="16" opacity=".7"/>
+    <path d="M84 80h32M100 64v32" opacity=".6"/>
+    <path d="M72 100q10-14 20 0M108 100q10-14 20 0" opacity=".6"/>
+    <path d="M70 150h20v40H70z" opacity=".7"/>
+    <path d="M110 150h20v40h-20z" opacity=".7"/>
+    <path d="M74 150q6-12 12 0M114 150q6-12 12 0" opacity=".6"/>
+    <path d="M78 190h4M118 190h4" opacity=".7"/>
+    <circle cx="80" cy="144" r="3" opacity=".8"/>
+    <circle cx="120" cy="144" r="3" opacity=".8"/>
+    <path d="M86 144q14 12 28 0" opacity=".6"/>
+    <circle cx="60" cy="60" r="1.5"/><circle cx="140" cy="60" r="1.5"/>
+    <circle cx="60" cy="180" r="1.5"/><circle cx="140" cy="180" r="1.5"/>
+    <circle cx="100" cy="30" r="1.5"/><circle cx="100" cy="210" r="1.5"/>
+    <path d="M60 60l40 60M140 60l-40 60M60 180l40-60M140 180l-40-60" opacity=".2" stroke-dasharray="2 4"/>
+  </g>
+</symbol>
+
+<!-- TAROT SCENE: EYE -->
+<symbol id="s-eye" viewBox="0 0 200 260">
+  <g fill="none" stroke="#b8a878" stroke-width="1" opacity=".65">
+    <circle cx="100" cy="120" r="58" opacity=".3"/>
+    <path d="M100 60l40 70-40 70-40-70z" opacity=".6"/>
+    <path d="M100 76l28 54-28 54-28-54z" opacity=".5"/>
+    <path d="M100 92l16 38-16 38-16-38z" opacity=".5"/>
+    <path d="M70 120q30-24 60 0-30 24-60 0z" opacity=".85"/>
+    <circle cx="100" cy="120" r="10" opacity=".9"/>
+    <circle cx="100" cy="120" r="5" opacity=".8"/>
+    <path d="M100 86v-10M100 154v10M70 100l-8-8M130 100l8-8M70 140l-8 8M130 140l8 8" opacity=".6"/>
+    <circle cx="60" cy="60" r="1.5"/><circle cx="140" cy="60" r="1.5"/>
+    <circle cx="60" cy="180" r="1.5"/><circle cx="140" cy="180" r="1.5"/>
+    <circle cx="100" cy="30" r="1.5"/><circle cx="100" cy="210" r="1.5"/>
+    <path d="M60 60l40 60M140 60l-40 60M60 180l40-60M140 180l-40-60" opacity=".2" stroke-dasharray="2 4"/>
+  </g>
+</symbol>
+
+<!-- SCENE: GENERIC WORK 1 -->
+<symbol id="w-1" viewBox="0 0 200 260">
+  <g fill="none" stroke="#b8a878" stroke-width="1" opacity=".6">
+    <circle cx="100" cy="120" r="56" opacity=".25"/>
+    <circle cx="100" cy="120" r="40" opacity=".3"/>
+    <path d="M100 64l20 40 44 4-32 30 8 44-40-22-40 22 8-44-32-30 44-4z" opacity=".7"/>
+    <circle cx="100" cy="120" r="14" opacity=".6"/>
+    <circle cx="100" cy="120" r="6" opacity=".8"/>
+    <path d="M64 64l72 112M136 64l-72 112" opacity=".2" stroke-dasharray="3 5"/>
+    <circle cx="60" cy="60" r="1.5"/><circle cx="140" cy="60" r="1.5"/>
+    <circle cx="60" cy="180" r="1.5"/><circle cx="140" cy="180" r="1.5"/>
+  </g>
+</symbol>
+
+<!-- SCENE: GENERIC WORK 2 -->
+<symbol id="w-2" viewBox="0 0 200 260">
+  <g fill="none" stroke="#b8a878" stroke-width="1" opacity=".6">
+    <circle cx="100" cy="120" r="56" opacity=".25"/>
+    <path d="M70 80h60v80H70z" opacity=".5"/>
+    <path d="M80 90h40v60H80z" opacity=".4"/>
+    <path d="M90 100h20v40H90z" opacity=".6"/>
+    <circle cx="100" cy="120" r="8" opacity=".8"/>
+    <path d="M70 80l60 80M130 80l-60 80" opacity=".25" stroke-dasharray="3 5"/>
+    <circle cx="60" cy="60" r="1.5"/><circle cx="140" cy="60" r="1.5"/>
+    <circle cx="60" cy="180" r="1.5"/><circle cx="140" cy="180" r="1.5"/>
+  </g>
+</symbol>
+
+<!-- SCENE: GENERIC WORK 3 -->
+<symbol id="w-3" viewBox="0 0 200 260">
+  <g fill="none" stroke="#b8a878" stroke-width="1" opacity=".6">
+    <circle cx="100" cy="120" r="56" opacity=".25"/>
+    <path d="M100 70l30 50-30 50-30-50z" opacity=".7"/>
+    <path d="M100 86l18 34-18 34-18-34z" opacity=".5"/>
+    <circle cx="100" cy="120" r="10" opacity=".7"/>
+    <path d="M70 70l60 100M130 70l-60 100" opacity=".2" stroke-dasharray="3 5"/>
+    <circle cx="60" cy="60" r="1.5"/><circle cx="140" cy="60" r="1.5"/>
+    <circle cx="60" cy="180" r="1.5"/><circle cx="140" cy="180" r="1.5"/>
+  </g>
+</symbol>
+
+<!-- SCENE: GENERIC WORK 4 -->
+<symbol id="w-4" viewBox="0 0 200 260">
+  <g fill="none" stroke="#b8a878" stroke-width="1" opacity=".6">
+    <circle cx="100" cy="120" r="56" opacity=".25"/>
+    <path d="M80 70h40v100H80z" opacity=".6"/>
+    <path d="M88 80h24v80H88z" opacity=".4"/>
+    <circle cx="100" cy="90" r="10" opacity=".8"/>
+    <path d="M80 170h40" opacity=".6"/>
+    <path d="M70 70l60 100M130 70l-60 100" opacity=".2" stroke-dasharray="3 5"/>
+    <circle cx="60" cy="60" r="1.5"/><circle cx="140" cy="60" r="1.5"/>
+    <circle cx="60" cy="180" r="1.5"/><circle cx="140" cy="180" r="1.5"/>
+  </g>
+</symbol>
+
+<!-- LOGO SCENE: XXI STAR -->
+<symbol id="logo-star" viewBox="0 0 44 58">
+  <g fill="none" stroke="#c9a961" stroke-width=".8" opacity=".9">
+    <rect x="4" y="4" width="36" height="50" rx="2" opacity=".5"/>
+    <path d="M22 14l3 8 8 .5-6 5 2 8-7-4-7 4 2-8-6-5 8-.5z" opacity=".9"/>
+    <circle cx="22" cy="24" r="2" opacity=".9"/>
+    <circle cx="22" cy="44" r="1" opacity=".6"/>
+    <path d="M12 50h20" opacity=".4"/>
+  </g>
+</symbol>
+
+</defs>
+</svg>
+
+<!-- ============================================================
+     HEADER
+     ============================================================ -->
+<header class="header">
+  <div class="header-inner">
+    <a href="#" class="logo">
+      <div class="logo-card">
+        <svg width="28" height="38"><use href="#logo-star"/></svg>
+      </div>
+      <div class="logo-name">
+        Fenbo
+        <small>ART · HAVEN</small>
+      </div>
+    </a>
+
+    <nav class="nav">
+      <a href="#" class="active">Аукционы</a>
+      <a href="#">Коммишки</a>
+      <a href="#">Магазин</a>
+      <a href="#">Художники</a>
+      <a href="#">Галерея</a>
+    </nav>
+
+    <div class="header-actions">
+      <button class="icon-btn" aria-label="Уведомления">
+        <svg width="18" height="18"><use href="#i-bell"/></svg>
+        <span class="badge">3</span>
+      </button>
+      <button class="wallet">
+        <svg width="16" height="16"><use href="#i-wallet"/></svg>
+        <b>1 240</b> USDT
+      </button>
+      <button class="btn btn-primary btn-sm">Открыть слот</button>
+      <div class="avatar-card">XVII</div>
+    </div>
+  </div>
+</header>
+
+<!-- ============================================================
+     HERO
+     ============================================================ -->
+<section class="hero">
+  <div class="wrap" style="position:relative;z-index:1">
+    <span class="eyebrow">Премиальная арт-платформа</span>
+    <h1>Твоё искусство — <em>под защитой</em>.<br>Твои заказы — в одном месте.</h1>
+    <p>Fenbo заменяет соцсети, Google-формы, блокноты с прайсами и разрозненные чаты. Escrow, анти-снайпер, защита от AI и DMCA — всё встроено.</p>
+    <div class="hero-actions">
+      <button class="btn btn-primary">Создать профиль</button>
+      <button class="btn btn-ghost">Смотреть аукционы</button>
+    </div>
+    <div class="hero-stats">
+      <div class="hero-stat"><b>12 480</b><span>Художников</span></div>
+      <div class="hero-stat"><b>3 216</b><span>Активных лотов</span></div>
+      <div class="hero-stat"><b>98.4%</b><span>Сделок без споров</span></div>
+      <div class="hero-stat"><b>24/7</b><span>Escrow-защита</span></div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"><span>✦ <span class="roman">I</span></span></div>
+
+<!-- ============================================================
+     LIVE AUCTIONS
+     ============================================================ -->
+<section>
+  <div class="wrap">
+    <div class="section-head">
+      <div>
+        <span class="eyebrow">Прямо сейчас</span>
+        <h2>Живые аукционы</h2>
+      </div>
+      <p>Ставки обновляются в реальном времени. Анти-снайпер продлевает торги на 10 минут при ставке в последние 5 минут.</p>
+    </div>
+
+    <div class="live-grid">
+      <!-- MAIN LOT -->
+      <article class="panel live-main">
+        <span class="live-badge"><span class="live-dot"></span> Live</span>
+        <h3>Звезда — Адопт</h3>
+        <p class="artist">by @sunny_art · ур. 24</p>
+        <div class="live-image">
+          <svg viewBox="0 0 200 260"><use href="#s-star"/></svg>
+        </div>
+        <div class="bid-info">
+          <div class="bid-box">
+            <span>Текущая ставка</span>
+            <b>420 USDT</b>
+          </div>
+          <div class="bid-box">
+            <span>До конца</span>
+            <b class="timer">04:12:38</b>
+          </div>
+        </div>
+        <button class="btn btn-primary" style="width:100%;justify-content:center">Сделать ставку</button>
+      </article>
+
+      <!-- MINI LOTS -->
+      <article class="panel mini-lot">
+        <div class="mini-thumb"><svg viewBox="0 0 200 260"><use href="#s-moon"/></svg></div>
+        <div class="mini-info">
+          <h4>Луна — YCH</h4>
+          <div class="meta"><span>14 ставок</span><span>02:48:10</span></div>
+        </div>
+        <div class="mini-price">180<small>USDT</small></div>
+      </article>
+
+      <article class="panel mini-lot">
+        <div class="mini-thumb"><svg viewBox="0 0 200 260"><use href="#s-sun"/></svg></div>
+        <div class="mini-info">
+          <h4>Солнце — Коммишка</h4>
+          <div class="meta"><span>9 ставок</span><span>01:12:44</span></div>
+        </div>
+        <div class="mini-price">260<small>USDT</small></div>
+      </article>
+
+      <article class="panel mini-lot">
+        <div class="mini-thumb"><svg viewBox="0 0 200 260"><use href="#s-cup"/></svg></div>
+        <div class="mini-info">
+          <h4>Кубок — Адопт</h4>
+          <div class="meta"><span>21 ставка</span><span>00:44:02</span></div>
+        </div>
+        <div class="mini-price">340<small>USDT</small></div>
+      </article>
+
+      <!-- BID FEED -->
+      <aside class="panel bid-feed" style="grid-row:span 2">
+        <h4>Лента ставок</h4>
+        <div class="bid-row">
+          <div class="bid-ava">VII</div>
+          <div class="who"><b>@north_wind</b><span>2 мин назад</span></div>
+          <div class="amount">420</div>
+        </div>
+        <div class="bid-row">
+          <div class="bid-ava">XIII</div>
+          <div class="who"><b>@moth_queen</b><span>8 мин назад</span></div>
+          <div class="amount">400</div>
+        </div>
+        <div class="bid-row">
+          <div class="bid-ava">IV</div>
+          <div class="who"><b>@ink_and_bone</b><span>17 мин назад</span></div>
+          <div class="amount">380</div>
+        </div>
+        <div class="bid-row">
+          <div class="bid-ava">XIX</div>
+          <div class="who"><b>@sunny_art</b><span>31 мин назад</span></div>
+          <div class="amount">350</div>
+        </div>
+        <div class="bid-row">
+          <div class="bid-ava">IX</div>
+          <div class="who"><b>@velvet_ash</b><span>45 мин назад</span></div>
+          <div class="amount">320</div>
+        </div>
+      </aside>
+    </div>
+  </div>
+</section>
+
+<div class="divider"><span>✦ <span class="roman">II</span></span></div>
+
+<!-- ============================================================
+     YCH / FIXED PRICE
+     ============================================================ -->
+<section>
+  <div class="wrap">
+    <div class="section-head">
+      <div>
+        <span class="eyebrow">Фикс-прайс</span>
+        <h2>Ищут покупателя</h2>
+      </div>
+      <p>YCH, адопты и готовые работы с фиксированной ценой. Оплата через Escrow — деньги переводятся после утверждения.</p>
+    </div>
+
+    <div class="tarot-grid">
+      <!-- CARD 1 -->
+      <article class="tarot-card">
+        <span class="corner tl"></span><span class="corner tr"></span>
+        <span class="corner bl"></span><span class="corner br"></span>
+        <div class="tarot-num"><b>I</b></div>
+        <div class="tarot-scene"><svg viewBox="0 0 200 260"><use href="#s-cup"/></svg></div>
+        <h3 class="tarot-title">THE CUP</h3>
+        <p class="tarot-sub">YCH — Cat · by @sunny_art</p>
+        <div class="tarot-meta">
+          <div><b>14</b><span>Ставки</span></div>
+          <div><b>1/2</b><span>Места</span></div>
+          <div><b>5</b><span>Предл.</span></div>
+        </div>
+        <div class="tarot-foot">
+          <div class="tarot-price">45<small>USDT</small></div>
+          <button class="btn btn-sm">Купить</button>
+        </div>
+      </article>
+
+      <!-- CARD 2 -->
+      <article class="tarot-card">
+        <span class="corner tl"></span><span class="corner tr"></span>
+        <span class="corner bl"></span><span class="corner br"></span>
+        <div class="tarot-num"><b>II</b></div>
+        <div class="tarot-scene"><svg viewBox="0 0 200 260"><use href="#s-moon"/></svg></div>
+        <h3 class="tarot-title">THE MOON</h3>
+        <p class="tarot-sub">Paimon — OC · by @moth_queen</p>
+        <div class="tarot-meta">
+          <div><b>32</b><span>Ставки</span></div>
+          <div><b>3/3</b><span>Места</span></div>
+          <div><b>12</b><span>Предл.</span></div>
+        </div>
+        <div class="tarot-foot">
+          <div class="tarot-price">180<small>USDT</small></div>
+          <button class="btn btn-sm">Купить</button>
+        </div>
+      </article>
+
+      <!-- CARD 3 -->
+      <article class="tarot-card">
+        <span class="corner tl"></span><span class="corner tr"></span>
+        <span class="corner bl"></span><span class="corner br"></span>
+        <div class="tarot-num"><b>III</b></div>
+        <div class="tarot-scene"><svg viewBox="0 0 200 260"><use href="#s-pentacle"/></svg></div>
+        <h3 class="tarot-title">THE PENTACLE</h3>
+        <p class="tarot-sub">Dark Fae — Adopt · by @velvet_ash</p>
+        <div class="tarot-meta">
+          <div><b>8</b><span>Ставки</span></div>
+          <div><b>1/1</b><span>Места</span></div>
+          <div><b>2</b><span>Предл.</span></div>
+        </div>
+        <div class="tarot-foot">
+          <div class="tarot-price">220<small>USDT</small></div>
+          <button class="btn btn-sm">Купить</button>
+        </div>
+      </article>
+
+      <!-- CARD 4 -->
+      <article class="tarot-card">
+        <span class="corner tl"></span><span class="corner tr"></span>
+        <span class="corner bl"></span><span class="corner br"></span>
+        <div class="tarot-num"><b>IV</b></div>
+        <div class="tarot-scene"><svg viewBox="0 0 200 260"><use href="#s-eye"/></svg></div>
+        <h3 class="tarot-title">THE EYE</h3>
+        <p class="tarot-sub">Live2D — Rig · by @ink_and_bone</p>
+        <div class="tarot-meta">
+          <div><b>19</b><span>Ставки</span></div>
+          <div><b>2/4</b><span>Места</span></div>
+          <div><b>7</b><span>Предл.</span></div>
+        </div>
+        <div class="tarot-foot">
+          <div class="tarot-price">340<small>USDT</small></div>
+          <button class="btn btn-sm">Купить</button>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<div class="divider"><span>✦ <span class="roman">III</span></span></div>
+
+<!-- ============================================================
+     SLOTS
+     ============================================================ -->
+<section>
+  <div class="wrap">
+    <div class="section-head">
+      <div>
+        <span class="eyebrow">Коммишки</span>
+        <h2>Открытые слоты</h2>
+      </div>
+      <p>Забронируй место заранее. Свободные места подсвечены — занятые заблокированы до освобождения.</p>
+    </div>
+
+    <div class="slot-grid">
+      <article class="slot-card">
+        <div class="slot-head">
+          <div>
+            <h4>Портрет — Bust</h4>
+            <p class="author">@sunny_art</p>
+          </div>
+          <span class="status open">Открыт</span>
+        </div>
+        <div class="slot-scene"><svg viewBox="0 0 200 260"><use href="#s-lovers"/></svg></div>
+        <div class="slot-seats">
+          <span class="seat free"></span>
+          <span class="seat free"></span>
+          <span class="seat"></span>
+          <span class="seat"></span>
+          <span>2 из 4 свободно</span>
+        </div>
+        <div class="slot-stats">
+          <div><b>14</b>ставок</div>
+          <div><b>5</b>предложений</div>
+          <div><b>45</b>USDT</div>
+        </div>
+        <button class="btn btn-primary" style="width:100%;justify-content:center">Забронировать</button>
+      </article>
+
+      <article class="slot-card">
+        <div class="slot-head">
+          <div>
+            <h4>Полный рост — Full</h4>
+            <p class="author">@moth_queen</p>
+          </div>
+          <span class="status busy">Занято</span>
+        </div>
+        <div class="slot-scene"><svg viewBox="0 0 200 260"><use href="#s-tower"/></svg></div>
+        <div class="slot-seats">
+          <span class="seat"></span>
+          <span class="seat"></span>
+          <span class="seat"></span>
+          <span>0 из 3 свободно</span>
+        </div>
+        <div class="slot-stats">
+          <div><b>32</b>ставок</div>
+          <div><b>12</b>предложений</div>
+          <div><b>120</b>USDT</div>
+        </div>
+        <button class="btn btn-ghost" style="width:100%;justify-content:center" disabled>Забронировать</button>
+      </article>
+
+      <article class="slot-card">
+        <div class="slot-head">
+          <div>
+            <h4>Референс-лист</h4>
+            <p class="author">@velvet_ash</p>
+          </div>
+          <span class="status open">Открыт</span>
+        </div>
+        <div class="slot-scene"><svg viewBox="0 0 200 260"><use href="#s-wheel"/></svg></div>
+        <div class="slot-seats">
+          <span class="seat free"></span>
+          <span class="seat free"></span>
+          <span class="seat free"></span>
+          <span>3 из 6 свободно</span>
+        </div>
+        <div class="slot-stats">
+          <div><b>8</b>ставок</div>
+          <div><b>3</b>предложений</div>
+          <div><b>60</b>USDT</div>
+        </div>
+        <button class="btn btn-primary" style="width:100%;justify-content:center">Забронировать</button>
+      </article>
+    </div>
+  </div>
+</section>
+
+<div class="divider"><span>✦ <span class="roman">IV</span></span></div>
+
+<!-- ============================================================
+     TRUST
+     ============================================================ -->
+<section>
+  <div class="wrap">
+    <div class="section-head">
+      <div>
+        <span class="eyebrow">Безопасность</span>
+        <h2>Почему нам доверяют</h2>
+      </div>
+      <p>Каждая сделка защищена. Деньги заморожены до утверждения работы, права зафиксированы, мошенники — в публичном чёрном списке.</p>
+    </div>
+
+    <div class="trust-grid">
+      <article class="trust-card">
+        <div class="trust-icon"><svg width="22" height="22"><use href="#i-shield"/></svg></div>
+        <h4>Escrow</h4>
+        <p>Деньги хранятся на платформе и переводятся художнику только после утверждения финального арта.</p>
+      </article>
+      <article class="trust-card">
+        <div class="trust-icon"><svg width="22" height="22"><use href="#i-timer"/></svg></div>
+        <h4>Анти-снайпер</h4>
+        <p>Ставка за 5 минут до конца продлевает аукцион на 10 минут. Честная победа без «последней секунды».</p>
+      </article>
+      <article class="trust-card">
+        <div class="trust-icon"><svg width="22" height="22"><use href="#i-eye"/></svg></div>
+        <h4>Защита от AI</h4>
+        <p>Невидимые шумы Glaze и Nightshade, запрет индексации, поиск визуальных дубликатов при загрузке.</p>
+      </article>
+      <article class="trust-card">
+        <div class="trust-icon"><svg width="22" height="22"><use href="#i-scale"/></svg></div>
+        <h4>DMCA</h4>
+        <p>Генератор претензий в один клик, логирование истории изменений, поддержка в судебных спорах.</p>
+      </article>
+    </div>
+  </div>
+</section>
+
+<div class="divider"><span>✦ <span class="roman">V</span></span></div>
+
+<!-- ============================================================
+     GALLERY
+     ============================================================ -->
+<section>
+  <div class="wrap">
+    <div class="section-head">
+      <div>
+        <span class="eyebrow">Портфолио</span>
+        <h2>Галерея</h2>
+      </div>
+      <p>Чистое портфолио без лотов и продаж. Работы художников Fenbo — от иллюстраций до 3D и Live2D.</p>
+    </div>
+
+    <div class="gallery-filters">
+      <button class="chip active">Всё</button>
+      <button class="chip">Иллюстрации</button>
+      <button class="chip">Концепты</button>
+      <button class="chip">Персонажи</button>
+      <button class="chip">Fan-art</button>
+      <button class="chip">3D / Live2D</button>
+      <label class="nsfw-toggle">
+        <span>Скрыть NSFW</span>
+        <span class="switch on" role="switch" aria-checked="true" tabindex="0"></span>
+      </label>
+    </div>
+
+    <div class="gallery-grid">
+      <div class="gallery-item">
+        <svg viewBox="0 0 200 260"><use href="#s-star"/></svg>
+        <span class="gallery-tag">Иллюстрация</span>
+        <div class="gallery-overlay"><h5>Astral</h5><span>@sunny_art</span></div>
+      </div>
+      <div class="gallery-item">
+        <svg viewBox="0 0 200 260"><use href="#s-moon"/></svg>
+        <span class="gallery-tag">Персонаж</span>
+        <div class="gallery-overlay"><h5>Lunar</h5><span>@moth_queen</span></div>
+      </div>
+      <div class="gallery-item">
+        <svg viewBox="0 0 200 260"><use href="#s-sun"/></svg>
+        <span class="gallery-tag">Концепт</span>
+        <div class="gallery-overlay"><h5>Solaris</h5><span>@velvet_ash</span></div>
+      </div>
+      <div class="gallery-item">
+        <svg viewBox="0 0 200 260"><use href="#s-eye"/></svg>
+        <span class="gallery-tag">3D / Live2D</span>
+        <div class="gallery-overlay"><h5>Oracle</h5><span>@ink_and_bone</span></div>
+      </div>
+      <div class="gallery-item">
+        <svg viewBox="0 0 200 260"><use href="#s-tower"/></svg>
+        <span class="gallery-tag">Fan-art</span>
+        <div class="gallery-overlay"><h5>Tower</h5><span>@north_wind</span></div>
+      </div>
+      <div class="gallery-item">
+        <svg viewBox="0 0 200 260"><use href="#s-sword"/></svg>
+        <span class="gallery-tag">Иллюстрация</span>
+        <div class="gallery-overlay"><h5>Blade</h5><span>@sunny_art</span></div>
+      </div>
+      <div class="gallery-item">
+        <svg viewBox="0 0 200 260"><use href="#s-cup"/></svg>
+        <span class="gallery-tag">Персонаж</span>
+        <div class="gallery-overlay"><h5>Chalice</h5><span>@moth_queen</span></div>
+      </div>
+      <div class="gallery-item">
+        <svg viewBox="0 0 200 260"><use href="#s-pentacle"/></svg>
+        <span class="gallery-tag">Концепт</span>
+        <div class="gallery-overlay"><h5>Sigil</h5><span>@velvet_ash</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     FOOTER
+     ============================================================ -->
+<footer class="footer">
+  <div class="wrap">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <a href="#" class="logo">
+          <div class="logo-card">
+            <svg width="28" height="38"><use href="#logo-star"/></svg>
+          </div>
+          <div class="logo-name">Fenbo<small>ART · HAVEN</small></div>
+        </a>
+        <p>Премиальная арт-платформа для художников и коллекционеров. Безопасность, удобство и уважение к автору.</p>
+      </div>
+      <div>
+        <h5>Платформа</h5>
+        <ul>
+          <li><a href="#">Аукционы</a></li>
+          <li><a href="#">Коммишки</a></li>
+          <li><a href="#">Магазин</a></li>
+          <li><a href="#">Художники</a></li>
+          <li><a href="#">Галерея</a></li>
+        </ul>
+      </div>
+      <div>
+        <h5>Помощь</h5>
+        <ul>
+          <li><a href="#">ToS</a></li>
+          <li><a href="#">Чёрный список</a></li>
+          <li><a href="#">Арбитраж</a></li>
+          <li><a href="#">FAQ</a></li>
+        </ul>
+      </div>
+      <div>
+        <h5>Сообщество</h5>
+        <ul>
+          <li><a href="#">Telegram</a></li>
+          <li><a href="#">Discord</a></li>
+          <li><a href="#">Twitter / X</a></li>
+          <li><a href="#">Instagram</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 Fenbo. Все права защищены.</span>
+      <span class="ornament">✦ ✦ ✦</span>
+      <span>Сделано с уважением к художникам</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+/* Minimal interactivity: NSFW toggle + chips */
+document.querySelectorAll('.switch').forEach(el=>{
+  el.addEventListener('click',()=>{
+    el.classList.toggle('on');
+    el.setAttribute('aria-checked', el.classList.contains('on'));
+  });
+  el.addEventListener('keydown',e=>{
+    if(e.key===' '||e.key==='Enter'){e.preventDefault();el.click();}
+  });
+});
+document.querySelectorAll('.chip').forEach(el=>{
+  el.addEventListener('click',()=>{
+    document.querySelectorAll('.chip').forEach(c=>c.classList.remove('active'));
+    el.classList.add('active');
+  });
+});
+</script>
+
+</body>
+</html>
