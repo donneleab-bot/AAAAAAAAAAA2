@@ -17,6 +17,7 @@
   --main:#0b0716;
   --card:#120d24;
   --elev:#1a1332;
+  --flat:#0b0716; /* one-color profile background */
 
   --gold-white:#fdf7dd;
   --gold-glow:#f6e5b4;
@@ -55,8 +56,8 @@
     0 0 80px -24px rgba(201,169,97,.55),
     inset 0 1px 0 rgba(253,247,221,.08);
 
-  --max:1280px;
-  --pad:clamp(20px, 4vw, 48px);
+  --max:1440px;
+  --pad:clamp(20px, 4vw, 56px);
   --ease:cubic-bezier(.2,.7,.2,1);
   --ease-out:cubic-bezier(.16,1,.3,1);
 }
@@ -140,6 +141,13 @@ ul{list-style:none}
 .bg-grain{position:fixed;inset:0;z-index:-1;pointer-events:none;opacity:.045;mix-blend-mode:overlay;
   background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='220' height='220'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3'/></filter><rect width='220' height='220' filter='url(%23n)'/></svg>")}
 
+/* Profile page overrides background — plain one-color */
+body.on-profile #cosmos,
+body.on-profile .bg-nebula,
+body.on-profile .bg-vignette,
+body.on-profile .bg-grain{display:none}
+body.on-profile{background:var(--flat)}
+
 /* ============================================================
    SCROLL PROGRESS
    ============================================================ */
@@ -222,7 +230,7 @@ section.tight{padding:clamp(44px,5.5vw,72px) 0}
    ============================================================ */
 .header{position:sticky;top:0;z-index:100;background:linear-gradient(180deg,rgba(11,7,22,.97),rgba(11,7,22,.86));border-bottom:1px solid rgba(201,169,97,.16)}
 .header::after{content:'';position:absolute;left:0;right:0;bottom:-1px;height:1px;background:linear-gradient(90deg,transparent,rgba(201,169,97,.45),transparent)}
-.header-inner{max-width:1440px;margin:0 auto;padding:16px var(--pad);display:flex;align-items:center;gap:32px}
+.header-inner{max-width:var(--max);margin:0 auto;padding:16px var(--pad);display:flex;align-items:center;gap:32px}
 .logo{display:flex;align-items:center;gap:14px;flex-shrink:0}
 .logo-card{width:46px;height:62px;flex-shrink:0;border-radius:7px;background:radial-gradient(circle at 50% 30%,rgba(201,169,97,.3),transparent 70%),linear-gradient(155deg,#2a1f4a 0%,#100a22 55%,#0a0616 100%);border:1px solid rgba(201,169,97,.55);display:grid;place-items:center;position:relative;box-shadow:0 0 28px -4px rgba(201,169,97,.35),inset 0 0 20px rgba(201,169,97,.1),0 10px 24px -8px rgba(0,0,0,.8);transition:transform .35s var(--ease-out),box-shadow .35s ease}
 .logo-card::before{content:'';position:absolute;inset:4px;border-radius:4px;border:1px solid rgba(201,169,97,.3)}
@@ -245,7 +253,6 @@ section.tight{padding:clamp(44px,5.5vw,72px) 0}
 .wallet:hover{transform:translateY(-2px);border-color:rgba(201,169,97,.7)}
 .wallet b{color:var(--gold-white);font-weight:700;letter-spacing:.02em}
 
-/* Avatar + dropdown */
 .avatar-wrap{position:relative}
 .avatar{
   width:44px;height:44px;border-radius:50%;
@@ -307,7 +314,7 @@ section.tight{padding:clamp(44px,5.5vw,72px) 0}
 .am-sep{height:1px;background:rgba(201,169,97,.12);margin:6px 4px}
 
 /* ============================================================
-   HERO
+   HERO (HOME)
    ============================================================ */
 .hero{padding:clamp(56px,7vw,96px) 0 clamp(48px,6vw,80px);position:relative;overflow:hidden}
 .hero-grid{display:grid;grid-template-columns:1.15fr 1fr;gap:64px;align-items:center}
@@ -575,123 +582,313 @@ section.tight{padding:clamp(44px,5.5vw,72px) 0}
 @keyframes pageIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
 
 /* ============================================================
-   PROFILE PAGE — ONE COLUMN, WIDE
+   PROFILE PAGE — passport sidebar, plain background
    ============================================================ */
-.profile-hero{
+.profile-shell{
+  max-width:var(--max);
+  margin:0 auto;
+  padding:clamp(40px,5vw,64px) var(--pad) clamp(64px,8vw,112px);
+  display:grid;
+  grid-template-columns:300px 1fr;
+  gap:clamp(32px,4vw,56px);
+  align-items:start;
+}
+
+/* --- Sidebar: художник-паспорт --- */
+.p-sidebar{
+  position:sticky;top:calc(76px + 32px);
+  display:flex;flex-direction:column;gap:24px;
+}
+.p-id{
+  display:flex;flex-direction:column;align-items:center;
+  padding:32px 20px 26px;
+  border-radius:var(--r-l);
+  background:linear-gradient(180deg,rgba(20,14,38,.8),rgba(11,7,22,.8));
+  border:1px solid rgba(201,169,97,.24);
+  text-align:center;
   position:relative;
-  padding:clamp(48px,6vw,80px) 0 clamp(24px,3vw,40px);
-  overflow:hidden;
 }
-.profile-cover{
-  position:absolute;inset:0;z-index:-1;
-  background:
-    radial-gradient(ellipse 800px 400px at 20% 0%,rgba(160,110,224,.3),transparent 65%),
-    radial-gradient(ellipse 700px 400px at 80% 20%,rgba(224,88,120,.2),transparent 65%),
-    radial-gradient(ellipse 600px 300px at 50% 100%,rgba(201,169,97,.15),transparent 65%),
-    linear-gradient(180deg,transparent,rgba(4,2,7,.7));
-  mask-image:linear-gradient(180deg,#000 0%,#000 55%,transparent 100%);
-  -webkit-mask-image:linear-gradient(180deg,#000 0%,#000 55%,transparent 100%);
+.p-id::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:1px;
+  background:linear-gradient(90deg,transparent,rgba(201,169,97,.55),transparent);
 }
-.profile-top{
-  display:grid;grid-template-columns:auto 1fr;gap:36px;align-items:center;
-  padding-bottom:36px;
-}
-.profile-ava{
-  width:160px;height:160px;border-radius:50%;
+.p-ava-wrap{position:relative;margin-bottom:18px}
+.p-ava{
+  width:110px;height:110px;border-radius:50%;
   background:
     radial-gradient(circle at 30% 25%, rgba(253,247,221,.5), transparent 45%),
-    radial-gradient(circle at 70% 80%, rgba(160,110,224,.6), transparent 55%),
+    radial-gradient(circle at 70% 80%, rgba(160,110,224,.65), transparent 55%),
     linear-gradient(155deg,#3a2a5e,#100a22 70%);
-  border:3px solid rgba(201,169,97,.7);
-  box-shadow:0 0 0 4px rgba(4,2,7,.9), 0 0 80px -10px rgba(201,169,97,.6);
-  position:relative;display:grid;place-items:center;
-  font-family:'Cormorant Garamond',serif;font-size:52px;font-weight:700;color:var(--gold-glow);
-  flex-shrink:0;
+  border:2.5px solid rgba(201,169,97,.7);
+  box-shadow:0 0 0 3px rgba(11,7,22,.95), 0 0 40px -10px rgba(201,169,97,.6);
+  display:grid;place-items:center;
+  font-family:'Cormorant Garamond',serif;font-size:34px;font-weight:700;
+  color:var(--gold-glow);
+  position:relative;
 }
-.profile-ava::after{
+.p-ava::after{
   content:'';position:absolute;inset:-8px;border-radius:50%;
   border:1px dashed rgba(201,169,97,.3);
 }
-.profile-info h1{font-size:clamp(34px,4vw,56px);margin-bottom:10px;line-height:1.05}
-.profile-info .handle{
+.p-online{
+  position:absolute;right:6px;bottom:6px;
+  width:16px;height:16px;border-radius:50%;
+  background:var(--success);
+  border:2.5px solid var(--flat);
+  box-shadow:0 0 12px var(--success);
+}
+.p-id h2{font-size:26px;margin-bottom:2px;font-weight:600;line-height:1.1}
+.p-id .p-handle{
   font-family:'Cormorant Garamond',serif;font-style:italic;
-  font-size:20px;color:var(--gold-soft);margin-bottom:16px;
+  font-size:14.5px;color:var(--gold-soft);margin-bottom:14px;
 }
-.profile-info .bio{
-  font-size:15.5px;color:var(--ink-soft);max-width:680px;line-height:1.75;margin-bottom:22px;
+.p-id .p-bio{
+  font-size:13px;color:var(--ink-soft);line-height:1.6;
+  margin-bottom:18px;max-width:240px;
 }
-.profile-stats{display:flex;gap:44px;flex-wrap:wrap;padding-top:4px}
-.profile-stats div{font-family:'Manrope',sans-serif;font-size:11.5px;color:var(--ink-mute);letter-spacing:.14em;text-transform:uppercase;font-weight:600}
-.profile-stats b{display:block;font-family:'Cormorant Garamond',serif;font-size:30px;color:var(--gold-white);margin-top:2px;font-weight:700;text-transform:none;line-height:1}
-.profile-actions{
-  display:flex;gap:12px;flex-wrap:wrap;
-  padding-top:28px;margin-top:28px;
-  border-top:1px solid rgba(201,169,97,.14);
+.p-id-stats{
+  display:grid;grid-template-columns:repeat(3,1fr);
+  gap:1px;width:100%;
+  background:rgba(201,169,97,.16);
+  border-radius:6px;overflow:hidden;
+  border:1px solid rgba(201,169,97,.14);
+}
+.p-id-stats div{
+  background:rgba(4,2,7,.55);
+  padding:10px 4px;text-align:center;
+}
+.p-id-stats b{
+  display:block;font-family:'Cormorant Garamond',serif;
+  font-size:20px;color:var(--gold-white);font-weight:700;
+  line-height:1;margin-bottom:3px;
+}
+.p-id-stats span{
+  font-family:'Manrope',sans-serif;font-size:9px;color:var(--ink-mute);
+  letter-spacing:.14em;text-transform:uppercase;font-weight:600;
 }
 
-/* Sticky tabs bar */
-.profile-tabs-wrap{
-  position:sticky;top:76px;z-index:50;
-  margin:0 0 40px;
-  background:linear-gradient(180deg,rgba(11,7,22,.95),rgba(11,7,22,.88));
-  border-top:1px solid rgba(201,169,97,.16);
-  border-bottom:1px solid rgba(201,169,97,.16);
-  box-shadow:0 10px 30px -20px rgba(0,0,0,.9);
+.p-nav{
+  display:flex;flex-direction:column;gap:4px;
+  padding:12px;
+  border-radius:var(--r-l);
+  background:linear-gradient(180deg,rgba(20,14,38,.75),rgba(11,7,22,.75));
+  border:1px solid rgba(201,169,97,.2);
 }
-.profile-tabs{
-  display:flex;gap:4px;
-  overflow-x:auto;scrollbar-width:none;-ms-overflow-style:none;
-}
-.profile-tabs::-webkit-scrollbar{display:none}
-.ptab{
-  position:relative;
-  padding:18px 24px;
+.p-nav button{
+  display:flex;align-items:center;gap:12px;
+  padding:12px 14px;
+  border-radius:8px;
   font-family:'Manrope',sans-serif;
-  font-size:13.5px;font-weight:600;letter-spacing:.04em;
-  color:var(--ink-mute);
-  transition:color .25s ease, background .25s ease;
-  white-space:nowrap;
-  display:inline-flex;align-items:center;gap:10px;
-  flex-shrink:0;
+  font-size:13.5px;font-weight:600;letter-spacing:.02em;
+  color:var(--ink-soft);
+  transition:background .2s ease,color .2s ease,transform .2s ease;
+  text-align:left;
+  position:relative;
 }
-.ptab svg{width:16px;height:16px;transition:color .25s ease}
-.ptab::after{
-  content:'';position:absolute;left:14px;right:14px;bottom:0;height:2px;
-  background:linear-gradient(90deg,transparent,var(--gold),transparent);
-  transform:scaleX(0);transform-origin:center;
-  transition:transform .4s var(--ease-out);
+.p-nav button:hover{background:rgba(201,169,97,.08);color:var(--gold-white);transform:translateX(2px)}
+.p-nav button.active{
+  background:linear-gradient(180deg,rgba(201,169,97,.22),rgba(201,169,97,.06));
+  color:var(--gold-white);
 }
-.ptab:hover{color:var(--gold-soft);background:rgba(201,169,97,.04)}
-.ptab.active{color:var(--gold-white);background:rgba(201,169,97,.06)}
-.ptab.active::after{transform:scaleX(1)}
-.ptab .count{
-  font-family:'Manrope',sans-serif;font-size:11px;font-weight:700;
-  padding:3px 8px;border-radius:100px;
+.p-nav button.active::before{
+  content:'';position:absolute;left:0;top:25%;bottom:25%;width:2px;
+  background:linear-gradient(180deg,transparent,var(--gold),transparent);
+  border-radius:2px;
+}
+.p-nav button svg{width:16px;height:16px;color:var(--gold-soft);flex-shrink:0;transition:color .2s ease}
+.p-nav button.active svg{color:var(--gold-glow)}
+.p-nav button .count{
+  margin-left:auto;
+  font-family:'Manrope',sans-serif;font-size:10.5px;font-weight:700;
+  padding:2px 8px;border-radius:100px;
   background:rgba(201,169,97,.14);
   color:var(--gold-soft);
-  transition:background .25s ease,color .25s ease;
+  letter-spacing:.02em;
 }
-.ptab.active .count{background:rgba(201,169,97,.32);color:var(--gold-white)}
+.p-nav button.active .count{background:rgba(201,169,97,.32);color:var(--gold-white)}
 
-.profile-body{
-  padding-bottom:clamp(64px,8vw,112px);
+.p-actions{
+  display:flex;flex-direction:column;gap:8px;
 }
-.profile-panel{display:none}
-.profile-panel.active{display:block;animation:pageIn .5s var(--ease-out)}
 
-/* Section header inside profile */
-.pf-head{
+/* --- Main content --- */
+.p-main{min-width:0}
+.p-panel{display:none}
+.p-panel.active{display:block;animation:pageIn .5s var(--ease-out)}
+
+.p-head{
   display:flex;align-items:flex-end;justify-content:space-between;
-  gap:24px;margin-bottom:32px;flex-wrap:wrap;
-  padding-bottom:20px;
+  gap:24px;margin-bottom:28px;flex-wrap:wrap;
+  padding-bottom:18px;
   border-bottom:1px solid rgba(201,169,97,.14);
 }
-.pf-head h2{font-size:clamp(26px,3vw,38px)}
-.pf-head p{color:var(--ink-mute);font-size:14.5px;margin-top:6px;max-width:600px}
-.pf-head .pf-actions{display:flex;gap:10px;flex-wrap:wrap}
+.p-head h2{font-size:clamp(24px,2.6vw,34px);font-weight:600}
+.p-head p{color:var(--ink-mute);font-size:14px;margin-top:4px;max-width:600px}
+.p-head .p-head-actions{display:flex;gap:10px;flex-wrap:wrap}
 
-/* PORTFOLIO — 4-col grid, big cards */
-.pf-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:22px}
+/* Filter chips inside overview */
+.p-chips{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:24px}
+.p-chip{
+  padding:8px 16px;border-radius:100px;
+  font-family:'Manrope',sans-serif;
+  font-size:11.5px;font-weight:600;letter-spacing:.06em;
+  color:var(--ink-soft);
+  border:1px solid rgba(201,169,97,.22);
+  background:rgba(20,14,38,.6);
+  transition:color .2s ease,border-color .2s ease,background .2s ease,transform .2s ease;
+  display:inline-flex;align-items:center;gap:8px;
+}
+.p-chip:hover{color:var(--gold-soft);border-color:rgba(201,169,97,.5);transform:translateY(-1px)}
+.p-chip.active{
+  color:var(--gold-white);
+  border-color:rgba(201,169,97,.7);
+  background:linear-gradient(180deg,rgba(201,169,97,.24),rgba(201,169,97,.06));
+}
+.p-chip .count{
+  font-size:10.5px;padding:1px 7px;border-radius:100px;
+  background:rgba(201,169,97,.16);color:var(--gold-soft);
+}
+.p-chip.active .count{background:rgba(201,169,97,.32);color:var(--gold-white)}
+
+/* Overview sections */
+.ov-section{margin-bottom:56px}
+.ov-section:last-child{margin-bottom:0}
+.ov-section-head{
+  display:flex;align-items:center;justify-content:space-between;
+  gap:16px;margin-bottom:20px;
+}
+.ov-section-head h3{font-size:24px;font-weight:600;display:flex;align-items:center;gap:12px}
+.ov-section-head h3::before{
+  content:'';width:24px;height:2px;
+  background:linear-gradient(90deg,transparent,var(--gold));
+}
+.ov-section-head a{
+  font-family:'Manrope',sans-serif;font-size:11.5px;font-weight:700;
+  letter-spacing:.1em;text-transform:uppercase;
+  color:var(--gold-soft);
+  transition:color .2s ease,transform .2s ease;
+}
+.ov-section-head a:hover{color:var(--gold-glow);transform:translateX(2px)}
+
+/* Fresh posts — masonry-like 2-col */
+.fresh-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:20px}
+.fresh-card{
+  padding:20px;border-radius:var(--r-l);
+  background:linear-gradient(160deg,rgba(20,14,38,.9),rgba(11,7,22,.96));
+  border:1px solid rgba(201,169,97,.22);
+  transition:transform .4s var(--ease-out),border-color .4s ease,box-shadow .4s ease;
+  display:flex;flex-direction:column;gap:14px;
+  cursor:pointer;
+  position:relative;overflow:hidden;
+}
+.fresh-card::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:1px;
+  background:linear-gradient(90deg,transparent,rgba(201,169,97,.4),transparent);
+}
+.fresh-card:hover{
+  transform:translateY(-4px);
+  border-color:rgba(201,169,97,.6);
+  box-shadow:var(--shadow-hover);
+}
+.fresh-img{
+  aspect-ratio:1;border-radius:10px;
+  background:radial-gradient(ellipse at 50% 40%,rgba(201,169,97,.16),transparent 70%),linear-gradient(165deg,#1e1636,#0a0716);
+  border:1px solid rgba(201,169,97,.28);
+  display:grid;place-items:center;position:relative;overflow:hidden;
+}
+.fresh-img svg{width:76%;height:76%;transition:transform .7s var(--ease-out)}
+.fresh-card:hover .fresh-img svg{transform:scale(1.06)}
+.fresh-tag{
+  position:absolute;top:12px;right:12px;
+  font-family:'Manrope',sans-serif;font-size:10px;letter-spacing:.2em;text-transform:uppercase;
+  padding:5px 10px;border-radius:4px;
+  background:rgba(4,2,7,.8);border:1px solid rgba(201,169,97,.45);
+  color:var(--gold-glow);font-weight:700;
+}
+.fresh-card h4{font-size:20px;font-weight:600;line-height:1.2}
+.fresh-card p{font-size:13.5px;color:var(--ink-soft);line-height:1.6;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.fresh-foot{display:flex;justify-content:space-between;align-items:center;padding-top:12px;border-top:1px solid rgba(201,169,97,.14);margin-top:auto}
+.fresh-foot .stats{display:flex;gap:16px}
+.fresh-foot .stats span{
+  font-family:'Manrope',sans-serif;font-size:12px;
+  color:var(--ink-mute);display:inline-flex;align-items:center;gap:5px;font-weight:500;
+}
+.fresh-foot .stats svg{width:13px;height:13px;stroke:var(--gold-deep)}
+.fresh-foot .when{font-family:'Manrope',sans-serif;font-size:11px;color:var(--ink-mute);letter-spacing:.04em;font-weight:500}
+
+/* Popular posts — horizontal scroll strip */
+.pop-scroll{
+  display:flex;gap:16px;overflow-x:auto;padding:4px 2px 14px;
+  scrollbar-width:none;-ms-overflow-style:none;
+  scroll-snap-type:x mandatory;
+}
+.pop-scroll::-webkit-scrollbar{display:none}
+.pop-item{
+  flex:0 0 240px;scroll-snap-align:start;
+  padding:16px;border-radius:var(--r-m);
+  background:linear-gradient(160deg,rgba(20,14,38,.9),rgba(11,7,22,.96));
+  border:1px solid rgba(201,169,97,.22);
+  transition:transform .4s var(--ease-out),border-color .4s ease,box-shadow .4s ease;
+  display:flex;flex-direction:column;gap:12px;
+  cursor:pointer;
+}
+.pop-item:hover{transform:translateY(-3px);border-color:rgba(201,169,97,.6);box-shadow:var(--shadow-hover)}
+.pop-img{
+  aspect-ratio:1;border-radius:8px;
+  background:radial-gradient(ellipse at 50% 40%,rgba(201,169,97,.16),transparent 70%),linear-gradient(165deg,#1e1636,#0a0716);
+  border:1px solid rgba(201,169,97,.26);
+  display:grid;place-items:center;position:relative;overflow:hidden;
+}
+.pop-img svg{width:72%;height:72%;transition:transform .7s var(--ease-out)}
+.pop-item:hover .pop-img svg{transform:scale(1.06)}
+.pop-rank{
+  position:absolute;top:8px;left:8px;
+  font-family:'Cormorant Garamond',serif;font-size:14px;font-weight:700;
+  padding:2px 8px;border-radius:4px;
+  background:linear-gradient(180deg,var(--gold-glow),var(--gold));
+  color:#1a1226;
+  box-shadow:0 0 14px -4px rgba(201,169,97,.7);
+}
+.pop-item h5{font-size:16px;font-weight:600;line-height:1.25;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pop-item .pop-meta{display:flex;justify-content:space-between;font-family:'Manrope',sans-serif;font-size:11.5px;color:var(--ink-mute)}
+.pop-item .pop-meta b{color:var(--gold-glow);font-weight:600}
+
+/* Portfolio preview */
+.ov-pf{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+.ov-pf-item{
+  position:relative;border-radius:var(--r-m);overflow:hidden;
+  border:1px solid rgba(201,169,97,.22);
+  background:radial-gradient(ellipse at 50% 30%,rgba(201,169,97,.15),transparent 70%),linear-gradient(165deg,#1a1330 0%,#0a0716 100%);
+  aspect-ratio:3/4;
+  transition:transform .5s var(--ease-out),border-color .5s ease,box-shadow .5s ease;
+  cursor:pointer;
+}
+.ov-pf-item:hover{
+  transform:translateY(-5px);
+  border-color:rgba(201,169,97,.65);
+  box-shadow:var(--shadow-hover);
+}
+.ov-pf-item svg{
+  position:absolute;inset:0;width:100%;height:100%;
+  padding:16%;opacity:.95;
+  transition:transform .7s var(--ease-out);
+}
+.ov-pf-item:hover svg{transform:scale(1.06)}
+.ov-pf-item .lbl{
+  position:absolute;left:0;right:0;bottom:0;padding:16px;
+  background:linear-gradient(0deg,rgba(4,2,7,.95),transparent);
+}
+.ov-pf-item .lbl h6{font-family:'Cormorant Garamond',serif;font-size:16px;font-weight:600;color:var(--gold-white)}
+.ov-pf-item .tag{
+  position:absolute;top:10px;right:10px;
+  font-family:'Manrope',sans-serif;font-size:9px;letter-spacing:.18em;text-transform:uppercase;
+  padding:3px 7px;border-radius:3px;
+  background:rgba(4,2,7,.75);border:1px solid rgba(201,169,97,.35);
+  color:var(--gold-glow);font-weight:700;
+}
+
+/* Portfolio full grid */
+.pf-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
 .pf-item{
   position:relative;border-radius:var(--r-l);overflow:hidden;
   border:1px solid rgba(201,169,97,.22);
@@ -700,77 +897,64 @@ section.tight{padding:clamp(44px,5.5vw,72px) 0}
   transition:transform .5s var(--ease-out),border-color .5s ease,box-shadow .5s ease;
   cursor:pointer;
 }
-.pf-item::after{
-  content:'';position:absolute;inset:10px;border-radius:14px;
-  border:1px solid rgba(201,169,97,.12);pointer-events:none;
-  transition:border-color .5s ease,inset .5s var(--ease-out);
-}
-.pf-item:hover{
-  transform:translateY(-6px);
-  border-color:rgba(201,169,97,.7);
-  box-shadow:var(--shadow-hover);
-}
-.pf-item:hover::after{border-color:rgba(201,169,97,.35);inset:6px}
+.pf-item:hover{transform:translateY(-6px);border-color:rgba(201,169,97,.7);box-shadow:var(--shadow-hover)}
 .pf-item svg{
   position:absolute;inset:0;width:100%;height:100%;
-  padding:16%;opacity:.95;
-  transition:transform .7s var(--ease-out);
+  padding:16%;opacity:.95;transition:transform .7s var(--ease-out);
 }
 .pf-item:hover svg{transform:scale(1.06)}
 .pf-item .pf-label{
-  position:absolute;left:0;right:0;bottom:0;padding:22px 20px;
-  background:linear-gradient(0deg,rgba(4,2,7,.95) 0%,rgba(4,2,7,.6) 60%,transparent 100%);
-  z-index:2;
+  position:absolute;left:0;right:0;bottom:0;padding:20px;
+  background:linear-gradient(0deg,rgba(4,2,7,.95),transparent);
 }
-.pf-item .pf-label h5{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:600;color:var(--gold-white);line-height:1.2;margin-bottom:3px}
-.pf-item .pf-label span{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:14px;color:var(--gold-soft)}
+.pf-item .pf-label h5{font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:600;color:var(--gold-white);line-height:1.2;margin-bottom:2px}
+.pf-item .pf-label span{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:13px;color:var(--gold-soft)}
 .pf-item .pf-tag{
-  position:absolute;top:14px;right:14px;z-index:2;
-  font-family:'Manrope',sans-serif;font-size:10px;letter-spacing:.2em;text-transform:uppercase;
-  padding:5px 11px;border-radius:4px;
-  background:rgba(4,2,7,.8);border:1px solid rgba(201,169,97,.5);
+  position:absolute;top:12px;right:12px;
+  font-family:'Manrope',sans-serif;font-size:9.5px;letter-spacing:.2em;text-transform:uppercase;
+  padding:4px 9px;border-radius:3px;
+  background:rgba(4,2,7,.8);border:1px solid rgba(201,169,97,.45);
   color:var(--gold-glow);font-weight:700;
-  box-shadow:0 0 20px -6px rgba(201,169,97,.5);
 }
 
-/* ARTICLES — 2 cols */
-.articles-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:22px}
+/* Articles */
+.articles-grid{display:grid;grid-template-columns:1fr;gap:16px}
 .article-card{
-  padding:30px;border-radius:var(--r-l);
-  background:linear-gradient(160deg,rgba(28,22,52,.9),rgba(13,10,26,.97));
+  padding:24px 26px;border-radius:var(--r-l);
+  background:linear-gradient(160deg,rgba(20,14,38,.9),rgba(11,7,22,.96));
   border:1px solid rgba(201,169,97,.22);
-  transition:transform .4s var(--ease-out),border-color .4s ease,box-shadow .4s ease;
-  display:flex;flex-direction:column;gap:16px;
-  position:relative;overflow:hidden;
+  transition:transform .35s var(--ease-out),border-color .35s ease,box-shadow .35s ease;
+  display:grid;grid-template-columns:1fr auto;gap:20px;align-items:center;
 }
-.article-card::before{
-  content:'';position:absolute;top:0;left:0;right:0;height:1px;
-  background:linear-gradient(90deg,transparent,rgba(201,169,97,.5),transparent);
-}
-.article-card:hover{transform:translateY(-4px);border-color:rgba(201,169,97,.6);box-shadow:var(--shadow-hover)}
-.article-meta{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.article-card:hover{transform:translateY(-3px);border-color:rgba(201,169,97,.55);box-shadow:var(--shadow-hover)}
+.article-body{min-width:0}
+.article-meta{display:flex;align-items:center;gap:12px;margin-bottom:8px;flex-wrap:wrap}
 .article-tag{
-  font-family:'Manrope',sans-serif;font-size:10.5px;font-weight:700;
+  font-family:'Manrope',sans-serif;font-size:10px;font-weight:700;
   letter-spacing:.2em;text-transform:uppercase;
-  padding:5px 11px;border-radius:4px;
+  padding:4px 10px;border-radius:4px;
   background:rgba(160,110,224,.14);
   border:1px solid rgba(160,110,224,.45);
   color:#d8c0ff;
 }
-.article-meta .date{font-family:'Manrope',sans-serif;font-size:12.5px;color:var(--ink-mute);margin-left:auto;font-weight:500}
-.article-card h4{font-family:'Cormorant Garamond',serif;font-size:26px;font-weight:600;color:var(--gold-white);line-height:1.2}
-.article-card p{font-size:14.5px;color:var(--ink-soft);line-height:1.7;flex:1}
-.article-foot{display:flex;justify-content:space-between;align-items:center;padding-top:16px;border-top:1px solid rgba(201,169,97,.14);margin-top:4px}
-.article-foot span{font-family:'Manrope',sans-serif;font-size:12.5px;color:var(--ink-mute);font-weight:500}
-.article-foot a{font-family:'Manrope',sans-serif;font-size:12px;color:var(--gold-soft);font-weight:700;letter-spacing:.08em;text-transform:uppercase;transition:color .2s ease}
+.article-meta .date{font-family:'Manrope',sans-serif;font-size:12px;color:var(--ink-mute);font-weight:500}
+.article-body h4{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:600;color:var(--gold-white);line-height:1.25;margin-bottom:6px}
+.article-body p{font-size:14px;color:var(--ink-soft);line-height:1.65;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.article-foot{display:flex;flex-direction:column;align-items:flex-end;gap:8px;flex-shrink:0}
+.article-foot span{font-family:'Manrope',sans-serif;font-size:11.5px;color:var(--ink-mute);font-weight:500;white-space:nowrap}
+.article-foot a{
+  font-family:'Manrope',sans-serif;font-size:11px;
+  color:var(--gold-soft);font-weight:700;letter-spacing:.1em;text-transform:uppercase;
+  transition:color .2s ease;
+}
 .article-foot a:hover{color:var(--gold-glow)}
 
-/* ORDERS — full-width rows */
-.orders-list{display:flex;flex-direction:column;gap:16px}
+/* Orders */
+.orders-list{display:flex;flex-direction:column;gap:14px}
 .order-row{
-  display:grid;grid-template-columns:100px 1fr auto auto;gap:24px;align-items:center;
-  padding:20px 26px;border-radius:var(--r-m);
-  background:linear-gradient(160deg,rgba(28,22,52,.9),rgba(13,10,26,.96));
+  display:grid;grid-template-columns:90px 1fr auto auto;gap:22px;align-items:center;
+  padding:18px 22px;border-radius:var(--r-m);
+  background:linear-gradient(160deg,rgba(20,14,38,.9),rgba(11,7,22,.96));
   border:1px solid rgba(201,169,97,.22);
   transition:transform .35s var(--ease-out),border-color .35s ease,box-shadow .35s ease;
 }
@@ -780,7 +964,7 @@ section.tight{padding:clamp(44px,5.5vw,72px) 0}
   box-shadow:0 24px 50px -24px rgba(0,0,0,.8), 0 0 0 1px rgba(201,169,97,.15);
 }
 .order-thumb{
-  width:100px;height:100px;border-radius:10px;flex-shrink:0;
+  width:90px;height:90px;border-radius:10px;flex-shrink:0;
   background:radial-gradient(ellipse at 50% 40%,rgba(201,169,97,.18),transparent 70%),linear-gradient(165deg,#1e1636,#0a0716);
   border:1px solid rgba(201,169,97,.32);
   display:grid;place-items:center;
@@ -792,15 +976,15 @@ section.tight{padding:clamp(44px,5.5vw,72px) 0}
 }
 .order-thumb svg{width:64%;opacity:.95}
 .order-info{min-width:0}
-.order-info .oid{font-family:'Manrope',sans-serif;font-size:11.5px;letter-spacing:.18em;text-transform:uppercase;color:var(--ink-mute);font-weight:600;margin-bottom:6px}
-.order-info h5{font-family:'Cormorant Garamond',serif;font-size:24px;font-weight:600;color:var(--gold-white);line-height:1.2;margin-bottom:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.order-info p{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:14.5px;color:var(--ink-mute)}
-.order-price{font-family:'Cormorant Garamond',serif;font-size:28px;color:var(--gold-glow);font-weight:700;white-space:nowrap;text-align:right;line-height:1}
-.order-price small{display:block;font-family:'Manrope',sans-serif;font-size:10.5px;color:var(--ink-mute);font-weight:600;letter-spacing:.14em;margin-top:5px}
+.order-info .oid{font-family:'Manrope',sans-serif;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--ink-mute);font-weight:600;margin-bottom:5px}
+.order-info h5{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:600;color:var(--gold-white);line-height:1.2;margin-bottom:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.order-info p{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:13.5px;color:var(--ink-mute)}
+.order-price{font-family:'Cormorant Garamond',serif;font-size:26px;color:var(--gold-glow);font-weight:700;white-space:nowrap;text-align:right;line-height:1}
+.order-price small{display:block;font-family:'Manrope',sans-serif;font-size:10px;color:var(--ink-mute);font-weight:600;letter-spacing:.14em;margin-top:5px}
 .order-status{
-  font-family:'Manrope',sans-serif;font-size:11px;font-weight:700;
+  font-family:'Manrope',sans-serif;font-size:10.5px;font-weight:700;
   letter-spacing:.14em;text-transform:uppercase;
-  padding:7px 14px;border-radius:100px;white-space:nowrap;
+  padding:6px 12px;border-radius:100px;white-space:nowrap;
   justify-self:end;
 }
 .order-status.done{color:#a8d4a8;background:rgba(142,192,142,.14);border:1px solid rgba(142,192,142,.55);box-shadow:0 0 16px -6px rgba(142,192,142,.4)}
@@ -808,20 +992,15 @@ section.tight{padding:clamp(44px,5.5vw,72px) 0}
 .order-status.new{color:#ff9db5;background:rgba(224,88,120,.16);border:1px solid rgba(224,88,120,.55);box-shadow:0 0 16px -6px rgba(224,88,120,.5)}
 .order-status.active{color:#a0d8ff;background:rgba(110,180,224,.14);border:1px solid rgba(110,180,224,.55);box-shadow:0 0 16px -6px rgba(110,180,224,.4)}
 
-/* POSTS — 3 cols, bigger cards */
-.ppost-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
+/* Full posts grid */
+.ppost-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:20px}
 .ppost{
-  padding:22px;border-radius:var(--r-l);
-  background:linear-gradient(160deg,rgba(28,22,52,.9),rgba(13,10,26,.97));
+  padding:20px;border-radius:var(--r-l);
+  background:linear-gradient(160deg,rgba(20,14,38,.9),rgba(11,7,22,.96));
   border:1px solid rgba(201,169,97,.22);
   transition:transform .4s var(--ease-out),border-color .4s ease,box-shadow .4s ease;
-  display:flex;flex-direction:column;gap:16px;
+  display:flex;flex-direction:column;gap:14px;
   cursor:pointer;
-  position:relative;overflow:hidden;
-}
-.ppost::before{
-  content:'';position:absolute;top:0;left:0;right:0;height:1px;
-  background:linear-gradient(90deg,transparent,rgba(201,169,97,.4),transparent);
 }
 .ppost:hover{transform:translateY(-4px);border-color:rgba(201,169,97,.6);box-shadow:var(--shadow-hover)}
 .ppost-img{
@@ -839,11 +1018,14 @@ section.tight{padding:clamp(44px,5.5vw,72px) 0}
   background:rgba(4,2,7,.8);border:1px solid rgba(201,169,97,.45);
   color:var(--gold-glow);font-weight:700;
 }
-.ppost h5{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:600;color:var(--gold-white);line-height:1.2}
-.ppost p{font-size:14px;color:var(--ink-soft);line-height:1.6;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.ppost h5{font-family:'Cormorant Garamond',serif;font-size:21px;font-weight:600;color:var(--gold-white);line-height:1.2}
+.ppost p{font-size:13.5px;color:var(--ink-soft);line-height:1.6;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
 .ppost .pf-foot{display:flex;justify-content:space-between;align-items:center;padding-top:14px;border-top:1px solid rgba(201,169,97,.14);margin-top:auto}
 .ppost .pf-foot span{font-family:'Manrope',sans-serif;font-size:12px;color:var(--ink-mute);display:inline-flex;align-items:center;gap:6px;font-weight:500}
 .ppost .pf-foot svg{width:14px;height:14px;stroke:var(--gold-deep)}
+
+/* Mobile tab bar — horizontal, inside profile */
+.p-mobile-tabs{display:none}
 
 /* ============================================================
    RESPONSIVE
@@ -853,8 +1035,9 @@ section.tight{padding:clamp(44px,5.5vw,72px) 0}
   .artists-strip{grid-template-columns:repeat(3,1fr)}
   .gallery-mini{grid-template-columns:repeat(4,1fr)}
   .trust-mini{grid-template-columns:repeat(2,1fr)}
-  .pf-grid{grid-template-columns:repeat(3,1fr)}
-  .ppost-grid{grid-template-columns:repeat(3,1fr)}
+  .profile-shell{grid-template-columns:260px 1fr;gap:36px}
+  .pf-grid{grid-template-columns:repeat(2,1fr)}
+  .ov-pf{grid-template-columns:repeat(3,1fr)}
 }
 @media (max-width:1100px){
   .nav{display:none}
@@ -865,15 +1048,38 @@ section.tight{padding:clamp(44px,5.5vw,72px) 0}
   .events-grid{grid-template-columns:1fr}
   .leader-grid{grid-template-columns:1fr}
   .footer-grid{grid-template-columns:1fr 1fr;gap:40px}
-  .profile-top{grid-template-columns:auto 1fr;gap:28px}
-  .profile-ava{width:130px;height:130px;font-size:42px}
-  .profile-stats{gap:32px}
-  .articles-grid{grid-template-columns:1fr}
-  .ppost-grid{grid-template-columns:repeat(2,1fr)}
-  .pf-grid{grid-template-columns:repeat(2,1fr)}
-  .order-row{grid-template-columns:80px 1fr auto;gap:18px;padding:16px}
+  .fresh-grid{grid-template-columns:1fr}
+  .order-row{grid-template-columns:80px 1fr auto;gap:16px;padding:14px}
   .order-thumb{width:80px;height:80px}
   .order-status{grid-column:1 / -1;justify-self:start;margin-top:4px}
+  .ppost-grid{grid-template-columns:1fr}
+  .ov-pf{grid-template-columns:repeat(2,1fr)}
+}
+@media (max-width:900px){
+  .profile-shell{grid-template-columns:1fr;gap:0}
+  .p-sidebar{position:static;display:grid;grid-template-columns:1fr;gap:16px;margin-bottom:32px}
+  .p-id{flex-direction:row;align-items:center;text-align:left;padding:20px;gap:18px}
+  .p-ava-wrap{margin-bottom:0}
+  .p-ava{width:80px;height:80px;font-size:26px}
+  .p-ava::after{inset:-6px}
+  .p-id-text{flex:1;min-width:0}
+  .p-id h2{font-size:22px}
+  .p-id .p-handle{font-size:13px;margin-bottom:8px}
+  .p-id .p-bio{display:none}
+  .p-id-stats{max-width:300px}
+  .p-id-stats b{font-size:17px}
+  .p-nav{flex-direction:row;overflow-x:auto;padding:6px;gap:2px;scrollbar-width:none;-ms-overflow-style:none}
+  .p-nav::-webkit-scrollbar{display:none}
+  .p-nav button{
+    flex-direction:column;gap:4px;padding:10px 14px;
+    font-size:11px;text-align:center;min-width:76px;flex-shrink:0;
+    border-radius:8px;
+  }
+  .p-nav button .count{display:none}
+  .p-nav button.active::before{display:none}
+  .p-nav button svg{width:18px;height:18px}
+  .p-actions{flex-direction:row;flex-wrap:wrap}
+  .p-actions .btn{flex:1;justify-content:center}
 }
 @media (max-width:768px){
   section{padding:60px 0}
@@ -889,16 +1095,9 @@ section.tight{padding:clamp(44px,5.5vw,72px) 0}
   .header-actions .wallet{display:none}
   .carousel-track > *{flex:0 0 280px}
   .hero-slogan{font-size:20px}
-  .profile-ava{width:100px;height:100px;font-size:34px}
-  .profile-top{grid-template-columns:1fr;text-align:center;gap:20px}
-  .profile-ava{margin:0 auto}
-  .profile-stats{justify-content:center;gap:24px}
-  .profile-actions{justify-content:center}
-  .profile-tabs-wrap{top:68px}
-  .ptab{padding:14px 16px;font-size:12.5px}
-  .ptab .count{display:none}
   .pf-grid{grid-template-columns:repeat(2,1fr)}
-  .ppost-grid{grid-template-columns:1fr}
+  .article-card{grid-template-columns:1fr;gap:12px}
+  .article-foot{flex-direction:row;justify-content:space-between;align-items:center;width:100%}
   .order-row{grid-template-columns:64px 1fr;gap:14px;padding:14px}
   .order-thumb{width:64px;height:64px}
   .order-price{grid-column:1 / -1;text-align:left}
@@ -913,6 +1112,7 @@ section.tight{padding:clamp(44px,5.5vw,72px) 0}
   .post-card{grid-template-columns:1fr}
   .post-thumb{aspect-ratio:16/10}
   .pf-grid{grid-template-columns:1fr}
+  .ov-pf{grid-template-columns:1fr}
 }
 
 @media (prefers-reduced-motion:reduce){
@@ -1082,9 +1282,7 @@ section.tight{padding:clamp(44px,5.5vw,72px) 0}
         <div class="hero-copy reveal">
           <span class="eyebrow">Арт-платформа нового поколения</span>
           <h1>Твоё искусство — <em class="ital gold-gradient">под защитой</em>.</h1>
-
           <div class="hero-slogan">Не смогли они? <b>Сделаем мы</b></div>
-
           <p class="hero-lead">Fenbo заменяет соцсети, Google-формы, блокноты с прайсами и разрозненные чаты. Escrow, анти-снайпер, защита от AI и DMCA — в одной тёмной и тёплой оболочке.</p>
           <div class="hero-actions">
             <button class="btn btn-primary magnetic">Создать профиль</button>
@@ -1146,94 +1344,63 @@ section.tight{padding:clamp(44px,5.5vw,72px) 0}
           <div class="auc-cat">Адопт · YCH</div>
           <h4>Astral Child</h4>
           <p class="auc-author">by @sunny_art</p>
-          <div class="auc-row">
-            <div class="auc-bid">420<small>USDT · 14 ставок</small></div>
-            <div class="auc-timer" data-cd="04:12:38">04:12:38</div>
-          </div>
+          <div class="auc-row"><div class="auc-bid">420<small>USDT · 14 ставок</small></div><div class="auc-timer" data-cd="04:12:38">04:12:38</div></div>
         </article>
-
         <article class="auc-card tilt reveal">
           <div class="auc-num">II</div>
           <div class="auc-scene"><svg viewBox="0 0 200 260"><use href="#s-moon"/></svg></div>
           <div class="auc-cat">Персонаж · OC</div>
           <h4>Lunar Paimon</h4>
           <p class="auc-author">by @moth_queen</p>
-          <div class="auc-row">
-            <div class="auc-bid">180<small>USDT · 32 ставки</small></div>
-            <div class="auc-timer" data-cd="02:48:10">02:48:10</div>
-          </div>
+          <div class="auc-row"><div class="auc-bid">180<small>USDT · 32 ставки</small></div><div class="auc-timer" data-cd="02:48:10">02:48:10</div></div>
         </article>
-
         <article class="auc-card tilt reveal">
           <div class="auc-num">III</div>
           <div class="auc-scene"><svg viewBox="0 0 200 260"><use href="#s-sun"/></svg></div>
           <div class="auc-cat">Коммишка · Full</div>
           <h4>Solaris</h4>
           <p class="auc-author">by @velvet_ash</p>
-          <div class="auc-row">
-            <div class="auc-bid">260<small>USDT · 9 ставок</small></div>
-            <div class="auc-timer" data-cd="01:12:44">01:12:44</div>
-          </div>
+          <div class="auc-row"><div class="auc-bid">260<small>USDT · 9 ставок</small></div><div class="auc-timer" data-cd="01:12:44">01:12:44</div></div>
         </article>
-
         <article class="auc-card tilt reveal">
           <div class="auc-num">IV</div>
           <div class="auc-scene"><svg viewBox="0 0 200 260"><use href="#s-eye"/></svg></div>
           <div class="auc-cat">Live2D · Rig</div>
           <h4>Oracle Eye</h4>
           <p class="auc-author">by @ink_and_bone</p>
-          <div class="auc-row">
-            <div class="auc-bid">340<small>USDT · 19 ставок</small></div>
-            <div class="auc-timer" data-cd="00:44:02">00:44:02</div>
-          </div>
+          <div class="auc-row"><div class="auc-bid">340<small>USDT · 19 ставок</small></div><div class="auc-timer" data-cd="00:44:02">00:44:02</div></div>
         </article>
-
         <article class="auc-card tilt reveal">
           <div class="auc-num">V</div>
           <div class="auc-scene"><svg viewBox="0 0 200 260"><use href="#s-cup"/></svg></div>
           <div class="auc-cat">YCH · Cat</div>
           <h4>Chalice</h4>
           <p class="auc-author">by @sunny_art</p>
-          <div class="auc-row">
-            <div class="auc-bid">45<small>USDT · 5 ставок</small></div>
-            <div class="auc-timer" data-cd="06:20:00">06:20:00</div>
-          </div>
+          <div class="auc-row"><div class="auc-bid">45<small>USDT · 5 ставок</small></div><div class="auc-timer" data-cd="06:20:00">06:20:00</div></div>
         </article>
-
         <article class="auc-card tilt reveal">
           <div class="auc-num">VI</div>
           <div class="auc-scene"><svg viewBox="0 0 200 260"><use href="#s-pentacle"/></svg></div>
           <div class="auc-cat">Адопт · Dark</div>
           <h4>Sigil Fae</h4>
           <p class="auc-author">by @velvet_ash</p>
-          <div class="auc-row">
-            <div class="auc-bid">220<small>USDT · 8 ставок</small></div>
-            <div class="auc-timer" data-cd="08:00:00">08:00:00</div>
-          </div>
+          <div class="auc-row"><div class="auc-bid">220<small>USDT · 8 ставок</small></div><div class="auc-timer" data-cd="08:00:00">08:00:00</div></div>
         </article>
-
         <article class="auc-card tilt reveal">
           <div class="auc-num">VII</div>
           <div class="auc-scene"><svg viewBox="0 0 200 260"><use href="#s-sword"/></svg></div>
           <div class="auc-cat">Концепт · Weapon</div>
           <h4>Blade of Dawn</h4>
           <p class="auc-author">by @north_wind</p>
-          <div class="auc-row">
-            <div class="auc-bid">150<small>USDT · 11 ставок</small></div>
-            <div class="auc-timer" data-cd="03:30:00">03:30:00</div>
-          </div>
+          <div class="auc-row"><div class="auc-bid">150<small>USDT · 11 ставок</small></div><div class="auc-timer" data-cd="03:30:00">03:30:00</div></div>
         </article>
-
         <article class="auc-card tilt reveal">
           <div class="auc-num">VIII</div>
           <div class="auc-scene"><svg viewBox="0 0 200 260"><use href="#s-tower"/></svg></div>
           <div class="auc-cat">Коммишка · Scene</div>
           <h4>Tower Fall</h4>
           <p class="auc-author">by @moth_queen</p>
-          <div class="auc-row">
-            <div class="auc-bid">280<small>USDT · 7 ставок</small></div>
-            <div class="auc-timer" data-cd="05:15:00">05:15:00</div>
-          </div>
+          <div class="auc-row"><div class="auc-bid">280<small>USDT · 7 ставок</small></div><div class="auc-timer" data-cd="05:15:00">05:15:00</div></div>
         </article>
       </div>
     </div>
@@ -1252,36 +1419,12 @@ section.tight{padding:clamp(44px,5.5vw,72px) 0}
         <p>Быстрый доступ к разделам — от аукционов адоптов до видеокурсов и 3D-моделей.</p>
       </div>
       <div class="cat-grid">
-        <button class="cat-card reveal">
-          <div class="cat-icon"><svg width="20" height="20"><use href="#i-crown"/></svg></div>
-          <h5>Аукционы</h5>
-          <span>312 лотов</span>
-        </button>
-        <button class="cat-card reveal">
-          <div class="cat-icon"><svg width="20" height="20"><use href="#i-brush"/></svg></div>
-          <h5>Коммишки</h5>
-          <span>874 слота</span>
-        </button>
-        <button class="cat-card reveal">
-          <div class="cat-icon"><svg width="20" height="20"><use href="#i-mask"/></svg></div>
-          <h5>Адопты</h5>
-          <span>124 лота</span>
-        </button>
-        <button class="cat-card reveal">
-          <div class="cat-icon"><svg width="20" height="20"><use href="#i-cube"/></svg></div>
-          <h5>3D / Live2D</h5>
-          <span>56 работ</span>
-        </button>
-        <button class="cat-card reveal">
-          <div class="cat-icon"><svg width="20" height="20"><use href="#i-gallery"/></svg></div>
-          <h5>Галерея</h5>
-          <span>∞ вдохновения</span>
-        </button>
-        <button class="cat-card reveal">
-          <div class="cat-icon"><svg width="20" height="20"><use href="#i-user"/></svg></div>
-          <h5>Художники</h5>
-          <span>12 480</span>
-        </button>
+        <button class="cat-card reveal"><div class="cat-icon"><svg width="20" height="20"><use href="#i-crown"/></svg></div><h5>Аукционы</h5><span>312 лотов</span></button>
+        <button class="cat-card reveal"><div class="cat-icon"><svg width="20" height="20"><use href="#i-brush"/></svg></div><h5>Коммишки</h5><span>874 слота</span></button>
+        <button class="cat-card reveal"><div class="cat-icon"><svg width="20" height="20"><use href="#i-mask"/></svg></div><h5>Адопты</h5><span>124 лота</span></button>
+        <button class="cat-card reveal"><div class="cat-icon"><svg width="20" height="20"><use href="#i-cube"/></svg></div><h5>3D / Live2D</h5><span>56 работ</span></button>
+        <button class="cat-card reveal"><div class="cat-icon"><svg width="20" height="20"><use href="#i-gallery"/></svg></div><h5>Галерея</h5><span>∞ вдохновения</span></button>
+        <button class="cat-card reveal"><div class="cat-icon"><svg width="20" height="20"><use href="#i-user"/></svg></div><h5>Художники</h5><span>12 480</span></button>
       </div>
     </div>
   </section>
@@ -1304,127 +1447,56 @@ section.tight{padding:clamp(44px,5.5vw,72px) 0}
           <article class="post-card reveal">
             <div class="post-thumb"><svg viewBox="0 0 200 260"><use href="#s-star"/></svg></div>
             <div class="post-body">
-              <div class="post-meta">
-                <span class="post-tag">Открыт слот</span>
-                <span class="author">@sunny_art</span>
-                <span class="time">2 мин назад</span>
-              </div>
+              <div class="post-meta"><span class="post-tag">Открыт слот</span><span class="author">@sunny_art</span><span class="time">2 мин назад</span></div>
               <h4>Открываю 4 слота на портреты</h4>
               <p>Bust-портреты, 1 персонаж, сложный фон — опция. Escrow, срок 2 недели, дедлайн обсуждаем в чате.</p>
-              <div class="post-foot">
-                <span><svg viewBox="0 0 24 24"><use href="#i-heart"/></svg>124</span>
-                <span><svg viewBox="0 0 24 24"><use href="#i-comment"/></svg>18</span>
-                <span><svg viewBox="0 0 24 24"><use href="#i-flame"/></svg>в тренде</span>
-              </div>
+              <div class="post-foot"><span><svg viewBox="0 0 24 24"><use href="#i-heart"/></svg>124</span><span><svg viewBox="0 0 24 24"><use href="#i-comment"/></svg>18</span><span><svg viewBox="0 0 24 24"><use href="#i-flame"/></svg>в тренде</span></div>
             </div>
           </article>
-
           <article class="post-card reveal">
             <div class="post-thumb"><svg viewBox="0 0 200 260"><use href="#s-moon"/></svg></div>
             <div class="post-body">
-              <div class="post-meta">
-                <span class="post-tag">Новая работа</span>
-                <span class="author">@moth_queen</span>
-                <span class="time">14 мин назад</span>
-              </div>
+              <div class="post-meta"><span class="post-tag">Новая работа</span><span class="author">@moth_queen</span><span class="time">14 мин назад</span></div>
               <h4>Lunar Paimon — финальный арт</h4>
-              <p>Закончила большую работу по OC. 18 часов, 42 слоя, палитра — сепия и лунный фиолет. Показываю превью.</p>
-              <div class="post-foot">
-                <span><svg viewBox="0 0 24 24"><use href="#i-heart"/></svg>312</span>
-                <span><svg viewBox="0 0 24 24"><use href="#i-comment"/></svg>46</span>
-              </div>
+              <p>Закончила большую работу по OC. 18 часов, 42 слоя, палитра — сепия и лунный фиолет.</p>
+              <div class="post-foot"><span><svg viewBox="0 0 24 24"><use href="#i-heart"/></svg>312</span><span><svg viewBox="0 0 24 24"><use href="#i-comment"/></svg>46</span></div>
             </div>
           </article>
-
           <article class="post-card reveal">
             <div class="post-thumb"><svg viewBox="0 0 200 260"><use href="#s-eye"/></svg></div>
             <div class="post-body">
-              <div class="post-meta">
-                <span class="post-tag">Live2D</span>
-                <span class="author">@ink_and_bone</span>
-                <span class="time">1 ч назад</span>
-              </div>
+              <div class="post-meta"><span class="post-tag">Live2D</span><span class="author">@ink_and_bone</span><span class="time">1 ч назад</span></div>
               <h4>Ригнула Oracle — 9 эмоций</h4>
-              <p>Полный риг для стримера: моргание, дыхание, lip-sync, 9 эмоций. Показываю тестовую анимацию и физику.</p>
-              <div class="post-foot">
-                <span><svg viewBox="0 0 24 24"><use href="#i-heart"/></svg>87</span>
-                <span><svg viewBox="0 0 24 24"><use href="#i-comment"/></svg>12</span>
-              </div>
+              <p>Полный риг для стримера: моргание, дыхание, lip-sync, 9 эмоций.</p>
+              <div class="post-foot"><span><svg viewBox="0 0 24 24"><use href="#i-heart"/></svg>87</span><span><svg viewBox="0 0 24 24"><use href="#i-comment"/></svg>12</span></div>
             </div>
           </article>
-
           <article class="post-card reveal">
             <div class="post-thumb"><svg viewBox="0 0 200 260"><use href="#s-sun"/></svg></div>
             <div class="post-body">
-              <div class="post-meta">
-                <span class="post-tag">Анонс</span>
-                <span class="author">@velvet_ash</span>
-                <span class="time">3 ч назад</span>
-              </div>
+              <div class="post-meta"><span class="post-tag">Анонс</span><span class="author">@velvet_ash</span><span class="time">3 ч назад</span></div>
               <h4>Mermay 2026 — принимаю заявки</h4>
               <p>Открываю мини-серию на Mermay. 6 слотов по фикс-прайсу, все работы попадут в галерею и на аукцион.</p>
-              <div class="post-foot">
-                <span><svg viewBox="0 0 24 24"><use href="#i-heart"/></svg>203</span>
-                <span><svg viewBox="0 0 24 24"><use href="#i-comment"/></svg>31</span>
-              </div>
+              <div class="post-foot"><span><svg viewBox="0 0 24 24"><use href="#i-heart"/></svg>203</span><span><svg viewBox="0 0 24 24"><use href="#i-comment"/></svg>31</span></div>
             </div>
           </article>
         </div>
 
         <aside class="feed-main">
           <div class="side-card reveal">
-            <div class="side-head">
-              <h5>Топ художников</h5>
-              <a href="#">Все</a>
-            </div>
-            <div class="artist-row">
-              <div class="artist-ava">I</div>
-              <div class="artist-info"><b>@sunny_art</b><span>124 лота · 4.9</span></div>
-              <div class="rank">I</div>
-            </div>
-            <div class="artist-row">
-              <div class="artist-ava">II</div>
-              <div class="artist-info"><b>@moth_queen</b><span>98 лотов · 4.9</span></div>
-              <div class="rank">II</div>
-            </div>
-            <div class="artist-row">
-              <div class="artist-ava">III</div>
-              <div class="artist-info"><b>@velvet_ash</b><span>76 лотов · 4.8</span></div>
-              <div class="rank">III</div>
-            </div>
-            <div class="artist-row">
-              <div class="artist-ava">IV</div>
-              <div class="artist-info"><b>@ink_and_bone</b><span>64 лота · 4.8</span></div>
-              <div class="rank">IV</div>
-            </div>
-            <div class="artist-row">
-              <div class="artist-ava">V</div>
-              <div class="artist-info"><b>@north_wind</b><span>52 лота · 4.7</span></div>
-              <div class="rank">V</div>
-            </div>
+            <div class="side-head"><h5>Топ художников</h5><a href="#">Все</a></div>
+            <div class="artist-row"><div class="artist-ava">I</div><div class="artist-info"><b>@sunny_art</b><span>124 лота · 4.9</span></div><div class="rank">I</div></div>
+            <div class="artist-row"><div class="artist-ava">II</div><div class="artist-info"><b>@moth_queen</b><span>98 лотов · 4.9</span></div><div class="rank">II</div></div>
+            <div class="artist-row"><div class="artist-ava">III</div><div class="artist-info"><b>@velvet_ash</b><span>76 лотов · 4.8</span></div><div class="rank">III</div></div>
+            <div class="artist-row"><div class="artist-ava">IV</div><div class="artist-info"><b>@ink_and_bone</b><span>64 лота · 4.8</span></div><div class="rank">IV</div></div>
+            <div class="artist-row"><div class="artist-ava">V</div><div class="artist-info"><b>@north_wind</b><span>52 лота · 4.7</span></div><div class="rank">V</div></div>
           </div>
-
           <div class="side-card reveal">
-            <div class="side-head">
-              <h5>Тренды</h5>
-              <a href="#">Все</a>
-            </div>
-            <div class="artist-row">
-              <div class="artist-ava"><svg width="16" height="16" style="color:var(--gold-glow)"><use href="#i-flame"/></svg></div>
-              <div class="artist-info"><b>#Mermay2026</b><span>412 постов</span></div>
-            </div>
-            <div class="artist-row">
-              <div class="artist-ava"><svg width="16" height="16" style="color:var(--gold-glow)"><use href="#i-flame"/></svg></div>
-              <div class="artist-info"><b>#DarkFae</b><span>287 постов</span></div>
-            </div>
-            <div class="artist-row">
-              <div class="artist-ava"><svg width="16" height="16" style="color:var(--gold-glow)"><use href="#i-flame"/></svg></div>
-              <div class="artist-info"><b>#Live2D</b><span>196 постов</span></div>
-            </div>
-            <div class="artist-row">
-              <div class="artist-ava"><svg width="16" height="16" style="color:var(--gold-glow)"><use href="#i-flame"/></svg></div>
-              <div class="artist-info"><b>#YCH</b><span>154 поста</span></div>
-            </div>
+            <div class="side-head"><h5>Тренды</h5><a href="#">Все</a></div>
+            <div class="artist-row"><div class="artist-ava"><svg width="16" height="16" style="color:var(--gold-glow)"><use href="#i-flame"/></svg></div><div class="artist-info"><b>#Mermay2026</b><span>412 постов</span></div></div>
+            <div class="artist-row"><div class="artist-ava"><svg width="16" height="16" style="color:var(--gold-glow)"><use href="#i-flame"/></svg></div><div class="artist-info"><b>#DarkFae</b><span>287 постов</span></div></div>
+            <div class="artist-row"><div class="artist-ava"><svg width="16" height="16" style="color:var(--gold-glow)"><use href="#i-flame"/></svg></div><div class="artist-info"><b>#Live2D</b><span>196 постов</span></div></div>
+            <div class="artist-row"><div class="artist-ava"><svg width="16" height="16" style="color:var(--gold-glow)"><use href="#i-flame"/></svg></div><div class="artist-info"><b>#YCH</b><span>154 поста</span></div></div>
           </div>
         </aside>
       </div>
@@ -1560,22 +1632,10 @@ section.tight{padding:clamp(44px,5.5vw,72px) 0}
         <p>Каждая сделка защищена. Деньги заморожены до утверждения работы, права зафиксированы.</p>
       </div>
       <div class="trust-mini">
-        <div class="tm reveal">
-          <div class="tm-icon"><svg width="18" height="18"><use href="#i-shield"/></svg></div>
-          <div><h5>Escrow</h5><p>Деньги до утверждения</p></div>
-        </div>
-        <div class="tm reveal">
-          <div class="tm-icon"><svg width="18" height="18"><use href="#i-timer"/></svg></div>
-          <div><h5>Анти-снайпер</h5><p>+10 минут к торгам</p></div>
-        </div>
-        <div class="tm reveal">
-          <div class="tm-icon"><svg width="18" height="18"><use href="#i-eye"/></svg></div>
-          <div><h5>Защита от AI</h5><p>Glaze / Nightshade</p></div>
-        </div>
-        <div class="tm reveal">
-          <div class="tm-icon"><svg width="18" height="18"><use href="#i-scale"/></svg></div>
-          <div><h5>DMCA</h5><p>Претензии в 1 клик</p></div>
-        </div>
+        <div class="tm reveal"><div class="tm-icon"><svg width="18" height="18"><use href="#i-shield"/></svg></div><div><h5>Escrow</h5><p>Деньги до утверждения</p></div></div>
+        <div class="tm reveal"><div class="tm-icon"><svg width="18" height="18"><use href="#i-timer"/></svg></div><div><h5>Анти-снайпер</h5><p>+10 минут к торгам</p></div></div>
+        <div class="tm reveal"><div class="tm-icon"><svg width="18" height="18"><use href="#i-eye"/></svg></div><div><h5>Защита от AI</h5><p>Glaze / Nightshade</p></div></div>
+        <div class="tm reveal"><div class="tm-icon"><svg width="18" height="18"><use href="#i-scale"/></svg></div><div><h5>DMCA</h5><p>Претензии в 1 клик</p></div></div>
       </div>
     </div>
   </section>
@@ -1583,295 +1643,329 @@ section.tight{padding:clamp(44px,5.5vw,72px) 0}
 </main>
 
 <!-- ============================================================
-     PAGE: PROFILE — ONE COLUMN
+     PAGE: PROFILE — passport sidebar + main
      ============================================================ -->
 <main id="page-profile" class="page">
 
-  <section class="profile-hero">
-    <div class="profile-cover"></div>
-    <div class="wrap">
-      <div class="profile-top">
-        <div class="profile-ava">XVII</div>
-        <div class="profile-info">
-          <h1>Sunny Art</h1>
-          <div class="handle">@sunny_art · художник · XVII</div>
-          <p class="bio">Рисую портреты и YCH. Тёмное фэнтези, сепия, гравировки. Работаю через Escrow, срок 1–2 недели. Принимаю заказы на OC и адопты.</p>
-          <div class="profile-stats">
-            <div>Работ<b>248</b></div>
-            <div>Заказов<b>132</b></div>
-            <div>Рейтинг<b>4.9</b></div>
-            <div>Подписчиков<b>8 421</b></div>
-          </div>
+  <div class="profile-shell">
+
+    <!-- SIDEBAR -->
+    <aside class="p-sidebar">
+
+      <!-- Passport -->
+      <div class="p-id">
+        <div class="p-ava-wrap">
+          <div class="p-ava">XVII</div>
+          <span class="p-online"></span>
+        </div>
+        <div class="p-id-text">
+          <h2>Sunny Art</h2>
+          <div class="p-handle">@sunny_art · XVII</div>
+          <p class="p-bio">Портреты и YCH. Тёмное фэнтези, сепия, гравировки. Работаю через Escrow.</p>
+        </div>
+        <div class="p-id-stats">
+          <div><b>248</b><span>Работ</span></div>
+          <div><b>132</b><span>Заказов</span></div>
+          <div><b>4.9</b><span>Рейтинг</span></div>
         </div>
       </div>
-      <div class="profile-actions">
-        <button class="btn btn-primary magnetic">Открыть слот</button>
-        <button class="btn btn-ghost magnetic">Написать</button>
-        <button class="btn btn-ghost magnetic">Поделиться</button>
-      </div>
-    </div>
-  </section>
 
-  <div class="wrap">
-    <div class="profile-tabs-wrap">
-      <div class="profile-tabs">
-        <button class="ptab active" data-tab="portfolio">
-          <svg><use href="#i-gallery"/></svg> Портфолио <span class="count">248</span>
+      <!-- Nav -->
+      <nav class="p-nav">
+        <button data-pnav="overview" class="active">
+          <svg><use href="#i-gallery"/></svg> Обзор <span class="count">6</span>
         </button>
-        <button class="ptab" data-tab="articles">
+        <button data-pnav="portfolio">
+          <svg><use href="#i-crown"/></svg> Портфолио <span class="count">248</span>
+        </button>
+        <button data-pnav="articles">
           <svg><use href="#i-book"/></svg> Статьи <span class="count">12</span>
         </button>
-        <button class="ptab" data-tab="done">
+        <button data-pnav="done">
           <svg><use href="#i-check"/></svg> Выполненные <span class="count">132</span>
         </button>
-        <button class="ptab" data-tab="incoming">
+        <button data-pnav="incoming">
           <svg><use href="#i-inbox"/></svg> Входящие <span class="count">7</span>
         </button>
-        <button class="ptab" data-tab="posts">
+        <button data-pnav="posts">
           <svg><use href="#i-brush"/></svg> Посты <span class="count">36</span>
         </button>
+      </nav>
+
+      <!-- Actions -->
+      <div class="p-actions">
+        <button class="btn btn-primary btn-sm magnetic">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#i-plus"/></svg>
+          Открыть слот
+        </button>
+        <button class="btn btn-ghost btn-sm magnetic">Написать</button>
       </div>
+
+    </aside>
+
+    <!-- MAIN -->
+    <div class="p-main">
+
+      <!-- OVERVIEW -->
+      <section class="p-panel active" data-panel="overview">
+
+        <!-- FRESH POSTS -->
+        <div class="ov-section">
+          <div class="ov-section-head">
+            <h3>Свежие посты</h3>
+            <a href="#" data-pnav="posts">Все 36 →</a>
+          </div>
+          <div class="fresh-grid">
+            <article class="fresh-card">
+              <div class="fresh-img"><svg viewBox="0 0 200 260"><use href="#s-star"/></svg><span class="fresh-tag">Новая работа</span></div>
+              <h4>Astral Child — финал</h4>
+              <p>18 часов, 42 слоя. Золото, сепия и звёзды.</p>
+              <div class="fresh-foot">
+                <div class="stats">
+                  <span><svg viewBox="0 0 24 24"><use href="#i-heart"/></svg>124</span>
+                  <span><svg viewBox="0 0 24 24"><use href="#i-comment"/></svg>18</span>
+                </div>
+                <span class="when">2 мин назад</span>
+              </div>
+            </article>
+            <article class="fresh-card">
+              <div class="fresh-img"><svg viewBox="0 0 200 260"><use href="#s-moon"/></svg><span class="fresh-tag">Открыт слот</span></div>
+              <h4>Lunar Paimon — превью</h4>
+              <p>4 слота на портреты. Срок 2 недели.</p>
+              <div class="fresh-foot">
+                <div class="stats">
+                  <span><svg viewBox="0 0 24 24"><use href="#i-heart"/></svg>312</span>
+                  <span><svg viewBox="0 0 24 24"><use href="#i-comment"/></svg>46</span>
+                </div>
+                <span class="when">14 мин назад</span>
+              </div>
+            </article>
+          </div>
+        </div>
+
+        <!-- POPULAR POSTS -->
+        <div class="ov-section">
+          <div class="ov-section-head">
+            <h3>Популярное</h3>
+            <a href="#" data-pnav="posts">Все →</a>
+          </div>
+          <div class="pop-scroll">
+            <article class="pop-item">
+              <div class="pop-img"><svg viewBox="0 0 200 260"><use href="#s-eye"/></svg><span class="pop-rank">№1</span></div>
+              <h5>Oracle Eye — риг</h5>
+              <div class="pop-meta"><span>1 240 ❤</span><b>+48</b></div>
+            </article>
+            <article class="pop-item">
+              <div class="pop-img"><svg viewBox="0 0 200 260"><use href="#s-moon"/></svg><span class="pop-rank">№2</span></div>
+              <h5>Lunar Paimon</h5>
+              <div class="pop-meta"><span>986 ❤</span><b>+32</b></div>
+            </article>
+            <article class="pop-item">
+              <div class="pop-img"><svg viewBox="0 0 200 260"><use href="#s-star"/></svg><span class="pop-rank">№3</span></div>
+              <h5>Astral Child</h5>
+              <div class="pop-meta"><span>812 ❤</span><b>+27</b></div>
+            </article>
+            <article class="pop-item">
+              <div class="pop-img"><svg viewBox="0 0 200 260"><use href="#s-tower"/></svg><span class="pop-rank">№4</span></div>
+              <h5>Tower Fall</h5>
+              <div class="pop-meta"><span>640 ❤</span><b>+18</b></div>
+            </article>
+            <article class="pop-item">
+              <div class="pop-img"><svg viewBox="0 0 200 260"><use href="#s-cup"/></svg><span class="pop-rank">№5</span></div>
+              <h5>Chalice YCH</h5>
+              <div class="pop-meta"><span>512 ❤</span><b>+14</b></div>
+            </article>
+          </div>
+        </div>
+
+        <!-- PORTFOLIO PREVIEW -->
+        <div class="ov-section">
+          <div class="ov-section-head">
+            <h3>Портфолио</h3>
+            <a href="#" data-pnav="portfolio">Все 248 →</a>
+          </div>
+          <div class="ov-pf">
+            <div class="ov-pf-item"><svg viewBox="0 0 200 260"><use href="#s-star"/></svg><span class="tag">Илл.</span><div class="lbl"><h6>Astral Child</h6></div></div>
+            <div class="ov-pf-item"><svg viewBox="0 0 200 260"><use href="#s-moon"/></svg><span class="tag">OC</span><div class="lbl"><h6>Lunar Paimon</h6></div></div>
+            <div class="ov-pf-item"><svg viewBox="0 0 200 260"><use href="#s-sun"/></svg><span class="tag">Full</span><div class="lbl"><h6>Solaris</h6></div></div>
+            <div class="ov-pf-item"><svg viewBox="0 0 200 260"><use href="#s-eye"/></svg><span class="tag">Live2D</span><div class="lbl"><h6>Oracle Eye</h6></div></div>
+          </div>
+        </div>
+
+      </section>
+
+      <!-- PORTFOLIO -->
+      <section class="p-panel" data-panel="portfolio">
+        <div class="p-head">
+          <div>
+            <h2>Портфолио</h2>
+            <p>Личные, коммерческие работы и концепты — единым каталогом.</p>
+          </div>
+          <div class="p-head-actions">
+            <button class="btn btn-ghost btn-sm magnetic">Все категории</button>
+            <button class="btn btn-primary btn-sm magnetic">Загрузить работу</button>
+          </div>
+        </div>
+        <div class="pf-grid">
+          <div class="pf-item"><svg viewBox="0 0 200 260"><use href="#s-star"/></svg><span class="pf-tag">Иллюстрация</span><div class="pf-label"><h5>Astral Child</h5><span>YCH · Cat</span></div></div>
+          <div class="pf-item"><svg viewBox="0 0 200 260"><use href="#s-moon"/></svg><span class="pf-tag">Персонаж</span><div class="pf-label"><h5>Lunar Paimon</h5><span>OC · Paimon</span></div></div>
+          <div class="pf-item"><svg viewBox="0 0 200 260"><use href="#s-sun"/></svg><span class="pf-tag">Коммишка</span><div class="pf-label"><h5>Solaris</h5><span>Full · OC</span></div></div>
+          <div class="pf-item"><svg viewBox="0 0 200 260"><use href="#s-eye"/></svg><span class="pf-tag">Live2D</span><div class="pf-label"><h5>Oracle Eye</h5><span>Rig · VTuber</span></div></div>
+          <div class="pf-item"><svg viewBox="0 0 200 260"><use href="#s-tower"/></svg><span class="pf-tag">Сцена</span><div class="pf-label"><h5>Tower Fall</h5><span>Full scene</span></div></div>
+          <div class="pf-item"><svg viewBox="0 0 200 260"><use href="#s-sword"/></svg><span class="pf-tag">Концепт</span><div class="pf-label"><h5>Blade of Dawn</h5><span>Weapon · OC</span></div></div>
+          <div class="pf-item"><svg viewBox="0 0 200 260"><use href="#s-cup"/></svg><span class="pf-tag">YCH</span><div class="pf-label"><h5>Chalice</h5><span>YCH · Cat</span></div></div>
+          <div class="pf-item"><svg viewBox="0 0 200 260"><use href="#s-pentacle"/></svg><span class="pf-tag">Адопт</span><div class="pf-label"><h5>Sigil Fae</h5><span>Adopt · Dark</span></div></div>
+          <div class="pf-item"><svg viewBox="0 0 200 260"><use href="#s-wheel"/></svg><span class="pf-tag">Концепт</span><div class="pf-label"><h5>Wheel of Time</h5><span>Concept · Item</span></div></div>
+        </div>
+      </section>
+
+      <!-- ARTICLES -->
+      <section class="p-panel" data-panel="articles">
+        <div class="p-head">
+          <div>
+            <h2>Библиотека статей</h2>
+            <p>Гайды, разборы, таймлапсы и личный опыт художника.</p>
+          </div>
+          <div class="p-head-actions">
+            <button class="btn btn-primary btn-sm magnetic">Написать статью</button>
+          </div>
+        </div>
+        <div class="articles-grid">
+          <article class="article-card">
+            <div class="article-body">
+              <div class="article-meta"><span class="article-tag">Гайд</span><span class="date">12 мая 2026</span></div>
+              <h4>Как я строю композицию в тёмном фэнтези</h4>
+              <p>Разбираю свои работы по слоям: от силуэта и золотого сечения до деталей гравировки. С примерами и сетками.</p>
+            </div>
+            <div class="article-foot"><span>8 мин · 2 340</span><a href="#">Читать →</a></div>
+          </article>
+          <article class="article-card">
+            <div class="article-body">
+              <div class="article-meta"><span class="article-tag">Разбор</span><span class="date">4 мая 2026</span></div>
+              <h4>Сепия, золото и фиолет: палитра для Таро</h4>
+              <p>Как собрать палитру, которая выглядит дорого, но не «кричит». Показываю свои токены и переходы.</p>
+            </div>
+            <div class="article-foot"><span>6 мин · 1 890</span><a href="#">Читать →</a></div>
+          </article>
+          <article class="article-card">
+            <div class="article-body">
+              <div class="article-meta"><span class="article-tag">Процесс</span><span class="date">27 апреля 2026</span></div>
+              <h4>Таймлапс: Astral Child от скетча до финала</h4>
+              <p>18 часов работы за 4 минуты видео. Комментирую каждое решение — от скетча до финальных эффектов.</p>
+            </div>
+            <div class="article-foot"><span>видео · 1 204</span><a href="#">Смотреть →</a></div>
+          </article>
+          <article class="article-card">
+            <div class="article-body">
+              <div class="article-meta"><span class="article-tag">Мнение</span><span class="date">18 апреля 2026</span></div>
+              <h4>Почему Escrow — не роскошь, а необходимость</h4>
+              <p>Личный опыт: как я потеряла 300 USDT на предоплате и почему теперь работаю только через защиту сделки.</p>
+            </div>
+            <div class="article-foot"><span>5 мин · 3 120</span><a href="#">Читать →</a></div>
+          </article>
+        </div>
+      </section>
+
+      <!-- DONE -->
+      <section class="p-panel" data-panel="done">
+        <div class="p-head">
+          <div>
+            <h2>Выполненные заказы</h2>
+            <p>История завершённых сделок с отметкой Escrow.</p>
+          </div>
+          <div class="p-head-actions">
+            <button class="btn btn-ghost btn-sm magnetic">Скачать PDF</button>
+          </div>
+        </div>
+        <div class="orders-list">
+          <div class="order-row">
+            <div class="order-thumb"><svg viewBox="0 0 200 260"><use href="#s-star"/></svg></div>
+            <div class="order-info"><div class="oid">#4821 · 12 мая 2026</div><h5>Astral Child — OC Sunny</h5><p>Адопт · 1 персонаж · сложный фон</p></div>
+            <div class="order-price">420<small>USDT · Escrow</small></div>
+            <div class="order-status done">Выполнен</div>
+          </div>
+          <div class="order-row">
+            <div class="order-thumb"><svg viewBox="0 0 200 260"><use href="#s-moon"/></svg></div>
+            <div class="order-info"><div class="oid">#4798 · 8 мая 2026</div><h5>Lunar Paimon — полный рост</h5><p>Коммишка · 1 персонаж · 2 правки</p></div>
+            <div class="order-price">180<small>USDT · Escrow</small></div>
+            <div class="order-status done">Выполнен</div>
+          </div>
+          <div class="order-row">
+            <div class="order-thumb"><svg viewBox="0 0 200 260"><use href="#s-eye"/></svg></div>
+            <div class="order-info"><div class="oid">#4752 · 1 мая 2026</div><h5>Oracle Eye — Live2D риг</h5><p>Live2D · 9 эмоций · lip-sync</p></div>
+            <div class="order-price">340<small>USDT · Escrow</small></div>
+            <div class="order-status done">Выполнен</div>
+          </div>
+          <div class="order-row">
+            <div class="order-thumb"><svg viewBox="0 0 200 260"><use href="#s-cup"/></svg></div>
+            <div class="order-info"><div class="oid">#4703 · 22 апреля 2026</div><h5>Chalice — YCH Cat</h5><p>YCH · Cat · фикс-прайс</p></div>
+            <div class="order-price">45<small>USDT · Escrow</small></div>
+            <div class="order-status done">Выполнен</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- INCOMING -->
+      <section class="p-panel" data-panel="incoming">
+        <div class="p-head">
+          <div>
+            <h2>Входящие заказы</h2>
+            <p>Новые заявки и предложения — отвечай или бери в работу.</p>
+          </div>
+          <div class="p-head-actions">
+            <button class="btn btn-ghost btn-sm magnetic">Все заявки</button>
+          </div>
+        </div>
+        <div class="orders-list">
+          <div class="order-row">
+            <div class="order-thumb"><svg viewBox="0 0 200 260"><use href="#s-sun"/></svg></div>
+            <div class="order-info"><div class="oid">#4902 · 2 мин назад</div><h5>Solaris — OC Full</h5><p>От @velvet_ash · персонаж + сцена</p></div>
+            <div class="order-price">260<small>USDT · ожидает</small></div>
+            <div class="order-status new">Новый</div>
+          </div>
+          <div class="order-row">
+            <div class="order-thumb"><svg viewBox="0 0 200 260"><use href="#s-pentacle"/></svg></div>
+            <div class="order-info"><div class="oid">#4899 · 14 мин назад</div><h5>Sigil Fae — адопт Dark</h5><p>От @moth_queen · адопт + права</p></div>
+            <div class="order-price">220<small>USDT · ожидает</small></div>
+            <div class="order-status new">Новый</div>
+          </div>
+          <div class="order-row">
+            <div class="order-thumb"><svg viewBox="0 0 200 260"><use href="#s-sword"/></svg></div>
+            <div class="order-info"><div class="oid">#4884 · 1 ч назад</div><h5>Blade of Dawn — концепт</h5><p>От @north_wind · оружие + 2 варианта</p></div>
+            <div class="order-price">150<small>USDT · на рассмотрении</small></div>
+            <div class="order-status wait">Ждёт отклика</div>
+          </div>
+          <div class="order-row">
+            <div class="order-thumb"><svg viewBox="0 0 200 260"><use href="#s-tower"/></svg></div>
+            <div class="order-info"><div class="oid">#4870 · 3 ч назад</div><h5>Tower Fall — сцена</h5><p>От @ink_and_bone · сцена + 3 персонажа</p></div>
+            <div class="order-price">280<small>USDT · в работе</small></div>
+            <div class="order-status active">В работе</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- POSTS -->
+      <section class="p-panel" data-panel="posts">
+        <div class="p-head">
+          <div>
+            <h2>Посты художника</h2>
+            <p>Рисунки, процессы, анонсы и открытые слоты.</p>
+          </div>
+          <div class="p-head-actions">
+            <button class="btn btn-primary btn-sm magnetic">Новый пост</button>
+          </div>
+        </div>
+        <div class="ppost-grid">
+          <article class="ppost"><div class="ppost-img"><svg viewBox="0 0 200 260"><use href="#s-star"/></svg><span class="ppost-tag">Новая работа</span></div><h5>Astral Child — финал</h5><p>18 часов, 42 слоя. Золото, сепия, звёзды.</p><div class="pf-foot"><span><svg viewBox="0 0 24 24"><use href="#i-heart"/></svg>124</span><span><svg viewBox="0 0 24 24"><use href="#i-comment"/></svg>18</span></div></article>
+          <article class="ppost"><div class="ppost-img"><svg viewBox="0 0 200 260"><use href="#s-moon"/></svg><span class="ppost-tag">Открыт слот</span></div><h5>Lunar Paimon — превью</h5><p>4 слота на портреты. Срок 2 недели.</p><div class="pf-foot"><span><svg viewBox="0 0 24 24"><use href="#i-heart"/></svg>312</span><span><svg viewBox="0 0 24 24"><use href="#i-comment"/></svg>46</span></div></article>
+          <article class="ppost"><div class="ppost-img"><svg viewBox="0 0 200 260"><use href="#s-cup"/></svg><span class="ppost-tag">YCH</span></div><h5>Chalice — YCH Cat</h5><p>Фикс-прайс 45 USDT. Escrow.</p><div class="pf-foot"><span><svg viewBox="0 0 24 24"><use href="#i-heart"/></svg>87</span><span><svg viewBox="0 0 24 24"><use href="#i-comment"/></svg>12</span></div></article>
+          <article class="ppost"><div class="ppost-img"><svg viewBox="0 0 200 260"><use href="#s-sun"/></svg><span class="ppost-tag">Анонс</span></div><h5>Mermay 2026</h5><p>Мини-серия на Mermay. 6 слотов.</p><div class="pf-foot"><span><svg viewBox="0 0 24 24"><use href="#i-heart"/></svg>203</span><span><svg viewBox="0 0 24 24"><use href="#i-comment"/></svg>31</span></div></article>
+          <article class="ppost"><div class="ppost-img"><svg viewBox="0 0 200 260"><use href="#s-eye"/></svg><span class="ppost-tag">Live2D</span></div><h5>Oracle Eye — риг</h5><p>9 эмоций, lip-sync, физика.</p><div class="pf-foot"><span><svg viewBox="0 0 24 24"><use href="#i-heart"/></svg>156</span><span><svg viewBox="0 0 24 24"><use href="#i-comment"/></svg>24</span></div></article>
+          <article class="ppost"><div class="ppost-img"><svg viewBox="0 0 200 260"><use href="#s-tower"/></svg><span class="ppost-tag">Сцена</span></div><h5>Tower Fall</h5><p>Большая сцена с 3 персонажами.</p><div class="pf-foot"><span><svg viewBox="0 0 24 24"><use href="#i-heart"/></svg>98</span><span><svg viewBox="0 0 24 24"><use href="#i-comment"/></svg>14</span></div></article>
+        </div>
+      </section>
+
     </div>
-  </div>
-
-  <div class="wrap profile-body">
-
-    <!-- PORTFOLIO -->
-    <div class="profile-panel active" data-panel="portfolio">
-      <div class="pf-head">
-        <div>
-          <h2>Портфолио</h2>
-          <p>Все работы художника, включая личные, коммерческие и концепты.</p>
-        </div>
-        <div class="pf-actions">
-          <button class="btn btn-ghost btn-sm magnetic">Все категории</button>
-          <button class="btn btn-primary btn-sm magnetic">Загрузить работу</button>
-        </div>
-      </div>
-      <div class="pf-grid">
-        <div class="pf-item"><svg viewBox="0 0 200 260"><use href="#s-star"/></svg><span class="pf-tag">Иллюстрация</span><div class="pf-label"><h5>Astral Child</h5><span>YCH · Cat</span></div></div>
-        <div class="pf-item"><svg viewBox="0 0 200 260"><use href="#s-moon"/></svg><span class="pf-tag">Персонаж</span><div class="pf-label"><h5>Lunar Paimon</h5><span>OC · Paimon</span></div></div>
-        <div class="pf-item"><svg viewBox="0 0 200 260"><use href="#s-sun"/></svg><span class="pf-tag">Коммишка</span><div class="pf-label"><h5>Solaris</h5><span>Full · OC</span></div></div>
-        <div class="pf-item"><svg viewBox="0 0 200 260"><use href="#s-eye"/></svg><span class="pf-tag">Live2D</span><div class="pf-label"><h5>Oracle Eye</h5><span>Rig · VTuber</span></div></div>
-        <div class="pf-item"><svg viewBox="0 0 200 260"><use href="#s-tower"/></svg><span class="pf-tag">Сцена</span><div class="pf-label"><h5>Tower Fall</h5><span>Full scene</span></div></div>
-        <div class="pf-item"><svg viewBox="0 0 200 260"><use href="#s-sword"/></svg><span class="pf-tag">Концепт</span><div class="pf-label"><h5>Blade of Dawn</h5><span>Weapon · OC</span></div></div>
-        <div class="pf-item"><svg viewBox="0 0 200 260"><use href="#s-cup"/></svg><span class="pf-tag">YCH</span><div class="pf-label"><h5>Chalice</h5><span>YCH · Cat</span></div></div>
-        <div class="pf-item"><svg viewBox="0 0 200 260"><use href="#s-pentacle"/></svg><span class="pf-tag">Адопт</span><div class="pf-label"><h5>Sigil Fae</h5><span>Adopt · Dark</span></div></div>
-      </div>
-    </div>
-
-    <!-- ARTICLES -->
-    <div class="profile-panel" data-panel="articles">
-      <div class="pf-head">
-        <div>
-          <h2>Библиотека статей</h2>
-          <p>Гайды, разборы, таймлапсы и личный опыт — всё, что художник публикует.</p>
-        </div>
-        <div class="pf-actions">
-          <button class="btn btn-primary btn-sm magnetic">Написать статью</button>
-        </div>
-      </div>
-      <div class="articles-grid">
-        <article class="article-card">
-          <div class="article-meta">
-            <span class="article-tag">Гайд</span>
-            <span class="date">12 мая 2026</span>
-          </div>
-          <h4>Как я строю композицию в тёмном фэнтези</h4>
-          <p>Разбираю свои работы по слоям: от силуэта и золотого сечения до деталей гравировки. С примерами и сетками.</p>
-          <div class="article-foot"><span>8 мин чтения · 2 340 просмотров</span><a href="#">Читать →</a></div>
-        </article>
-        <article class="article-card">
-          <div class="article-meta">
-            <span class="article-tag">Разбор</span>
-            <span class="date">4 мая 2026</span>
-          </div>
-          <h4>Сепия, золото и фиолет: палитра для Таро</h4>
-          <p>Как собрать палитру, которая выглядит дорого, но не «кричит». Показываю свои токены и переходы.</p>
-          <div class="article-foot"><span>6 мин чтения · 1 890 просмотров</span><a href="#">Читать →</a></div>
-        </article>
-        <article class="article-card">
-          <div class="article-meta">
-            <span class="article-tag">Процесс</span>
-            <span class="date">27 апреля 2026</span>
-          </div>
-          <h4>Таймлапс: Astral Child от скетча до финала</h4>
-          <p>18 часов работы за 4 минуты видео. Комментирую каждое решение — от скетча до финальных эффектов.</p>
-          <div class="article-foot"><span>видео · 1 204 просмотра</span><a href="#">Смотреть →</a></div>
-        </article>
-        <article class="article-card">
-          <div class="article-meta">
-            <span class="article-tag">Мнение</span>
-            <span class="date">18 апреля 2026</span>
-          </div>
-          <h4>Почему Escrow — не роскошь, а необходимость</h4>
-          <p>Личный опыт: как я потеряла 300 USDT на предоплате и почему теперь работаю только через защиту сделки.</p>
-          <div class="article-foot"><span>5 мин чтения · 3 120 просмотров</span><a href="#">Читать →</a></div>
-        </article>
-      </div>
-    </div>
-
-    <!-- DONE ORDERS -->
-    <div class="profile-panel" data-panel="done">
-      <div class="pf-head">
-        <div>
-          <h2>Выполненные заказы</h2>
-          <p>История завершённых сделок с отметкой Escrow.</p>
-        </div>
-        <div class="pf-actions">
-          <button class="btn btn-ghost btn-sm magnetic">Скачать PDF</button>
-        </div>
-      </div>
-      <div class="orders-list">
-        <div class="order-row">
-          <div class="order-thumb"><svg viewBox="0 0 200 260"><use href="#s-star"/></svg></div>
-          <div class="order-info">
-            <div class="oid">#4821 · 12 мая 2026</div>
-            <h5>Astral Child — OC Sunny</h5>
-            <p>Адопт · 1 персонаж · сложный фон</p>
-          </div>
-          <div class="order-price">420<small>USDT · Escrow</small></div>
-          <div class="order-status done">Выполнен</div>
-        </div>
-        <div class="order-row">
-          <div class="order-thumb"><svg viewBox="0 0 200 260"><use href="#s-moon"/></svg></div>
-          <div class="order-info">
-            <div class="oid">#4798 · 8 мая 2026</div>
-            <h5>Lunar Paimon — полный рост</h5>
-            <p>Коммишка · 1 персонаж · 2 правки</p>
-          </div>
-          <div class="order-price">180<small>USDT · Escrow</small></div>
-          <div class="order-status done">Выполнен</div>
-        </div>
-        <div class="order-row">
-          <div class="order-thumb"><svg viewBox="0 0 200 260"><use href="#s-eye"/></svg></div>
-          <div class="order-info">
-            <div class="oid">#4752 · 1 мая 2026</div>
-            <h5>Oracle Eye — Live2D риг</h5>
-            <p>Live2D · 9 эмоций · lip-sync</p>
-          </div>
-          <div class="order-price">340<small>USDT · Escrow</small></div>
-          <div class="order-status done">Выполнен</div>
-        </div>
-        <div class="order-row">
-          <div class="order-thumb"><svg viewBox="0 0 200 260"><use href="#s-cup"/></svg></div>
-          <div class="order-info">
-            <div class="oid">#4703 · 22 апреля 2026</div>
-            <h5>Chalice — YCH Cat</h5>
-            <p>YCH · Cat · фикс-прайс</p>
-          </div>
-          <div class="order-price">45<small>USDT · Escrow</small></div>
-          <div class="order-status done">Выполнен</div>
-        </div>
-      </div>
-    </div>
-
-    <!-- INCOMING -->
-    <div class="profile-panel" data-panel="incoming">
-      <div class="pf-head">
-        <div>
-          <h2>Входящие заказы</h2>
-          <p>Новые заявки и предложения — отвечай в чате или бери в работу.</p>
-        </div>
-        <div class="pf-actions">
-          <button class="btn btn-ghost btn-sm magnetic">Все заявки</button>
-        </div>
-      </div>
-      <div class="orders-list">
-        <div class="order-row">
-          <div class="order-thumb"><svg viewBox="0 0 200 260"><use href="#s-sun"/></svg></div>
-          <div class="order-info">
-            <div class="oid">#4902 · 2 мин назад</div>
-            <h5>Solaris — OC Full</h5>
-            <p>От @velvet_ash · персонаж + сцена</p>
-          </div>
-          <div class="order-price">260<small>USDT · ожидает ответа</small></div>
-          <div class="order-status new">Новый</div>
-        </div>
-        <div class="order-row">
-          <div class="order-thumb"><svg viewBox="0 0 200 260"><use href="#s-pentacle"/></svg></div>
-          <div class="order-info">
-            <div class="oid">#4899 · 14 мин назад</div>
-            <h5>Sigil Fae — адопт Dark</h5>
-            <p>От @moth_queen · адопт + права</p>
-          </div>
-          <div class="order-price">220<small>USDT · ожидает ответа</small></div>
-          <div class="order-status new">Новый</div>
-        </div>
-        <div class="order-row">
-          <div class="order-thumb"><svg viewBox="0 0 200 260"><use href="#s-sword"/></svg></div>
-          <div class="order-info">
-            <div class="oid">#4884 · 1 ч назад</div>
-            <h5>Blade of Dawn — концепт</h5>
-            <p>От @north_wind · оружие + 2 варианта</p>
-          </div>
-          <div class="order-price">150<small>USDT · на рассмотрении</small></div>
-          <div class="order-status wait">Ждёт отклика</div>
-        </div>
-        <div class="order-row">
-          <div class="order-thumb"><svg viewBox="0 0 200 260"><use href="#s-tower"/></svg></div>
-          <div class="order-info">
-            <div class="oid">#4870 · 3 ч назад</div>
-            <h5>Tower Fall — сцена</h5>
-            <p>От @ink_and_bone · сцена + 3 персонажа</p>
-          </div>
-          <div class="order-price">280<small>USDT · в работе</small></div>
-          <div class="order-status active">В работе</div>
-        </div>
-      </div>
-    </div>
-
-    <!-- POSTS -->
-    <div class="profile-panel" data-panel="posts">
-      <div class="pf-head">
-        <div>
-          <h2>Посты художника</h2>
-          <p>Рисунки, процессы, анонсы и открытые слоты — всё в одной ленте.</p>
-        </div>
-        <div class="pf-actions">
-          <button class="btn btn-primary btn-sm magnetic">Новый пост</button>
-        </div>
-      </div>
-      <div class="ppost-grid">
-        <article class="ppost">
-          <div class="ppost-img"><svg viewBox="0 0 200 260"><use href="#s-star"/></svg><span class="ppost-tag">Новая работа</span></div>
-          <h5>Astral Child — финал</h5>
-          <p>18 часов, 42 слоя. Золото, сепия, звёзды.</p>
-          <div class="pf-foot"><span><svg viewBox="0 0 24 24"><use href="#i-heart"/></svg>124</span><span><svg viewBox="0 0 24 24"><use href="#i-comment"/></svg>18</span></div>
-        </article>
-        <article class="ppost">
-          <div class="ppost-img"><svg viewBox="0 0 200 260"><use href="#s-moon"/></svg><span class="ppost-tag">Открыт слот</span></div>
-          <h5>Lunar Paimon — превью</h5>
-          <p>4 слота на портреты. Срок 2 недели.</p>
-          <div class="pf-foot"><span><svg viewBox="0 0 24 24"><use href="#i-heart"/></svg>312</span><span><svg viewBox="0 0 24 24"><use href="#i-comment"/></svg>46</span></div>
-        </article>
-        <article class="ppost">
-          <div class="ppost-img"><svg viewBox="0 0 200 260"><use href="#s-cup"/></svg><span class="ppost-tag">YCH</span></div>
-          <h5>Chalice — YCH Cat</h5>
-          <p>Фикс-прайс 45 USDT. Escrow.</p>
-          <div class="pf-foot"><span><svg viewBox="0 0 24 24"><use href="#i-heart"/></svg>87</span><span><svg viewBox="0 0 24 24"><use href="#i-comment"/></svg>12</span></div>
-        </article>
-        <article class="ppost">
-          <div class="ppost-img"><svg viewBox="0 0 200 260"><use href="#s-sun"/></svg><span class="ppost-tag">Анонс</span></div>
-          <h5>Mermay 2026</h5>
-          <p>Мини-серия на Mermay. 6 слотов.</p>
-          <div class="pf-foot"><span><svg viewBox="0 0 24 24"><use href="#i-heart"/></svg>203</span><span><svg viewBox="0 0 24 24"><use href="#i-comment"/></svg>31</span></div>
-        </article>
-        <article class="ppost">
-          <div class="ppost-img"><svg viewBox="0 0 200 260"><use href="#s-eye"/></svg><span class="ppost-tag">Live2D</span></div>
-          <h5>Oracle Eye — риг</h5>
-          <p>9 эмоций, lip-sync, физика.</p>
-          <div class="pf-foot"><span><svg viewBox="0 0 24 24"><use href="#i-heart"/></svg>156</span><span><svg viewBox="0 0 24 24"><use href="#i-comment"/></svg>24</span></div>
-        </article>
-        <article class="ppost">
-          <div class="ppost-img"><svg viewBox="0 0 200 260"><use href="#s-tower"/></svg><span class="ppost-tag">Сцена</span></div>
-          <h5>Tower Fall</h5>
-          <p>Большая сцена с 3 персонажами.</p>
-          <div class="pf-foot"><span><svg viewBox="0 0 24 24"><use href="#i-heart"/></svg>98</span><span><svg viewBox="0 0 24 24"><use href="#i-comment"/></svg>14</span></div>
-        </article>
-      </div>
-    </div>
-
   </div>
 </main>
 
@@ -1905,6 +1999,7 @@ function showPage(name){
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
   const target = document.getElementById('page-'+name);
   if(target){
+    document.body.classList.toggle('on-profile', name === 'profile');
     target.classList.add('active');
     window.scrollTo({top:0,behavior:'smooth'});
     document.querySelectorAll('.page.active .reveal').forEach(el=>{
@@ -1936,7 +2031,7 @@ window.addEventListener('load', ()=>{
   tick();
   document.addEventListener('mousedown',()=>c.classList.add('click'));
   document.addEventListener('mouseup',()=>c.classList.remove('click'));
-  const t='a,button,.auc-card,.gm-item,.artist-card,.cat-card,.post-card,.event-card,.side-card,.logo,.avatar,.icon-btn,.wallet,.carousel-btn,.pf-item,.article-card,.order-row,.ppost,.ptab,.am-item';
+  const t='a,button,.auc-card,.gm-item,.artist-card,.cat-card,.post-card,.event-card,.side-card,.logo,.avatar,.icon-btn,.wallet,.carousel-btn,.pf-item,.article-card,.order-row,.ppost,.p-nav button,.am-item,.fresh-card,.pop-item,.ov-pf-item';
   document.querySelectorAll(t).forEach(el=>{
     el.addEventListener('mouseenter',()=>c.classList.add('hover'));
     el.addEventListener('mouseleave',()=>c.classList.remove('hover'));
@@ -2217,6 +2312,11 @@ window.addEventListener('load', ()=>{
 
   function loop(){
     if(!running) return;
+    // skip when profile is active
+    if(document.body.classList.contains('on-profile')){
+      requestAnimationFrame(loop);
+      return;
+    }
     t += 0.016;
     par.x += ((mouse.x - 0.5) * 2 - par.x) * 0.035;
     par.y += ((mouse.y - 0.5) * 2 - par.y) * 0.035;
@@ -2371,7 +2471,7 @@ window.addEventListener('load', ()=>{
   });
 })();
 
-/* NAVIGATION */
+/* NAVIGATION (data-nav) */
 (()=>{
   document.querySelectorAll('[data-nav]').forEach(el=>{
     el.addEventListener('click', e=>{
@@ -2381,21 +2481,38 @@ window.addEventListener('load', ()=>{
         showPage(dest);
         const m=document.getElementById('avatarMenu');
         if(m) m.classList.remove('open');
+        // reset profile tab if opening profile
+        if(dest === 'profile'){
+          const first = document.querySelector('.p-nav button');
+          if(first) first.click();
+        }
       }
     });
   });
 })();
 
-/* PROFILE TABS */
+/* PROFILE PANELS via sidebar */
 (()=>{
-  document.querySelectorAll('.ptab').forEach(tab=>{
-    tab.addEventListener('click', ()=>{
-      const target = tab.dataset.tab;
-      document.querySelectorAll('.ptab').forEach(t=>t.classList.remove('active'));
-      tab.classList.add('active');
-      document.querySelectorAll('.profile-panel').forEach(p=>p.classList.remove('active'));
-      const panel = document.querySelector(`.profile-panel[data-panel="${target}"]`);
-      if(panel) panel.classList.add('active');
+  const buttons = document.querySelectorAll('[data-pnav]');
+  buttons.forEach(btn=>{
+    btn.addEventListener('click', e=>{
+      e.preventDefault();
+      const target = btn.dataset.pnav;
+      document.querySelectorAll('.p-nav button').forEach(b=>b.classList.remove('active'));
+      // Also mark the matching sidebar item
+      const sideBtn = document.querySelector(`.p-nav button[data-pnav="${target}"]`);
+      if(sideBtn) sideBtn.classList.add('active');
+      document.querySelectorAll('.p-panel').forEach(p=>p.classList.remove('active'));
+      const panel = document.querySelector(`.p-panel[data-panel="${target}"]`);
+      if(panel){
+        panel.classList.add('active');
+        // scroll to top of profile main
+        const shell = panel.closest('.profile-shell');
+        if(shell){
+          const y = shell.getBoundingClientRect().top + window.scrollY - 90;
+          window.scrollTo({top: Math.max(0,y), behavior:'smooth'});
+        }
+      }
     });
   });
 })();
