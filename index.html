@@ -581,7 +581,7 @@ section.tight{padding:clamp(44px,5.5vw,72px) 0}
 @keyframes pageIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
 
 /* ============================================================
-   PROFILE PAGE — banner + avatar + horizontal tabs
+   PROFILE PAGE — banner, avatar bottom-left, name right
    ============================================================ */
 .profile-shell{
   max-width:var(--max);
@@ -592,7 +592,7 @@ section.tight{padding:clamp(44px,5.5vw,72px) 0}
 .p-banner{
   position:relative;
   margin-top:clamp(20px,3vw,32px);
-  height:clamp(220px,28vw,340px);
+  height:clamp(220px,26vw,320px);
   border-radius:var(--r-xl);
   overflow:hidden;
   border:1px solid rgba(201,169,97,.28);
@@ -607,10 +607,7 @@ section.tight{padding:clamp(44px,5.5vw,72px) 0}
   content:'';position:absolute;inset:12px;border-radius:calc(var(--r-xl) - 8px);
   border:1px solid rgba(201,169,97,.16);pointer-events:none;z-index:1;
 }
-/* decorative constellations inside banner */
-.p-banner-deco{
-  position:absolute;inset:0;opacity:.4;pointer-events:none;
-}
+.p-banner-deco{position:absolute;inset:0;opacity:.4;pointer-events:none}
 .p-banner-deco svg{width:100%;height:100%}
 
 /* Banner top-right actions */
@@ -634,9 +631,7 @@ section.tight{padding:clamp(44px,5.5vw,72px) 0}
 }
 .p-banner-btn:hover{transform:translateY(-1px);background:rgba(4,2,7,.85);border-color:rgba(201,169,97,.7)}
 .p-banner-btn svg{width:14px;height:14px;color:var(--gold-glow)}
-.p-banner-btn.palette{
-  padding:10px 12px;gap:6px;
-}
+.p-banner-btn.palette{padding:10px 12px;gap:6px}
 .p-banner-btn.palette .swatch{
   width:12px;height:12px;border-radius:50%;
   border:1.5px solid rgba(4,2,7,.8);
@@ -649,13 +644,25 @@ section.tight{padding:clamp(44px,5.5vw,72px) 0}
 .p-banner-btn.palette .swatch:nth-child(4){background:#5ee0d0}
 .p-banner-btn.palette:hover .swatch{transform:scale(1.15)}
 
-/* Avatar overlapping banner bottom */
-.p-banner-avatar{
-  position:absolute;
-  left:clamp(24px,4vw,56px);
-  bottom:clamp(-60px,-6vw,-60px);
-  transform:translateY(50%);
-  z-index:5;
+/* Identity under banner: avatar pulled DOWN, name right */
+.p-identity{
+  margin-top:0;
+  padding:0 4px;
+  display:grid;
+  grid-template-columns:clamp(120px,15vw,180px) 1fr auto;
+  gap:clamp(20px,3vw,36px);
+  align-items:center;
+  position:relative;
+}
+
+/* Avatar pulled out of banner (pulled down) */
+.p-identity .p-ava-wrap{
+  margin-top:clamp(-80px,-9vw,-60px); /* pulled UP into banner */
+  transform:translateY(0);
+  position:relative;
+  z-index:4;
+}
+.p-ava{
   width:clamp(120px,15vw,180px);
   height:clamp(120px,15vw,180px);
   border-radius:50%;
@@ -671,12 +678,12 @@ section.tight{padding:clamp(44px,5.5vw,72px) 0}
   color:var(--gold-glow);
   position:relative;
 }
-.p-banner-avatar::after{
+.p-ava::after{
   content:'';position:absolute;inset:-12px;border-radius:50%;
   border:1px dashed rgba(201,169,97,.35);
   pointer-events:none;
 }
-.p-banner-avatar .status{
+.p-ava .status{
   position:absolute;right:8%;bottom:6%;
   width:clamp(16px,2vw,22px);height:clamp(16px,2vw,22px);
   border-radius:50%;
@@ -684,7 +691,7 @@ section.tight{padding:clamp(44px,5.5vw,72px) 0}
   border:3px solid var(--flat);
   box-shadow:0 0 12px var(--success);
 }
-.p-banner-avatar .edit-ava{
+.p-ava .edit-ava{
   position:absolute;right:6%;top:6%;
   width:32px;height:32px;border-radius:50%;
   background:rgba(4,2,7,.85);
@@ -694,55 +701,50 @@ section.tight{padding:clamp(44px,5.5vw,72px) 0}
   opacity:0;transition:opacity .2s ease,transform .2s ease;
   cursor:pointer;
 }
-.p-banner-avatar:hover .edit-ava{opacity:1}
-.p-banner-avatar .edit-ava:hover{transform:scale(1.1);color:var(--gold-white)}
-.p-banner-avatar .edit-ava svg{width:14px;height:14px}
+.p-ava:hover .edit-ava{opacity:1}
+.p-ava .edit-ava:hover{transform:scale(1.1);color:var(--gold-white)}
+.p-ava .edit-ava svg{width:14px;height:14px}
 
-/* Identity under banner */
-.p-identity{
-  margin-top:clamp(72px,9vw,100px);
-  padding:0 4px;
-  display:grid;
-  grid-template-columns:1fr auto;
-  gap:24px;
-  align-items:flex-end;
-}
-.p-identity h1{
-  font-size:clamp(30px,3.8vw,48px);
+/* identity text (right of avatar) */
+.p-id-text{min-width:0}
+.p-id-text h1{
+  font-size:clamp(28px,3.6vw,44px);
   font-weight:600;
   margin-bottom:6px;line-height:1.05;
 }
-.p-identity .handle{
+.p-id-text .handle{
   font-family:'Cormorant Garamond',serif;
-  font-style:italic;font-size:clamp(15px,1.6vw,19px);
+  font-style:italic;font-size:clamp(14px,1.5vw,18px);
   color:var(--gold-soft);
-  margin-bottom:14px;
+  margin-bottom:12px;
 }
-.p-identity .bio{
-  font-size:15px;color:var(--ink-soft);
-  max-width:680px;line-height:1.7;margin-bottom:18px;
+.p-id-text .bio{
+  font-size:14.5px;color:var(--ink-soft);
+  max-width:760px;line-height:1.65;margin-bottom:0;
 }
-.p-identity-stats{
-  display:flex;gap:32px;flex-wrap:wrap;
+.p-id-stats{
+  display:flex;gap:28px;flex-wrap:wrap;margin-top:14px;
 }
-.p-identity-stats div{
+.p-id-stats div{
   font-family:'Manrope',sans-serif;
-  font-size:11px;color:var(--ink-mute);
+  font-size:10.5px;color:var(--ink-mute);
   letter-spacing:.14em;text-transform:uppercase;font-weight:600;
 }
-.p-identity-stats b{
+.p-id-stats b{
   display:block;font-family:'Cormorant Garamond',serif;
-  font-size:24px;color:var(--gold-white);margin-top:2px;font-weight:700;
+  font-size:22px;color:var(--gold-white);margin-top:2px;font-weight:700;
   text-transform:none;line-height:1;
 }
+
 .p-identity-actions{
   display:flex;gap:10px;flex-wrap:wrap;
   justify-content:flex-end;align-items:flex-start;
+  align-self:center;
 }
 
-/* Horizontal tab bar */
+/* horizontal tabs */
 .p-tabs-bar{
-  margin-top:clamp(28px,3.5vw,40px);
+  margin-top:clamp(24px,3vw,36px);
   display:flex;align-items:center;justify-content:space-between;
   gap:16px;
   border-top:1px solid rgba(201,169,97,.18);
@@ -752,10 +754,7 @@ section.tight{padding:clamp(44px,5.5vw,72px) 0}
   scrollbar-width:none;-ms-overflow-style:none;
 }
 .p-tabs-bar::-webkit-scrollbar{display:none}
-.p-tabs{
-  display:flex;gap:2px;
-  flex-shrink:0;
-}
+.p-tabs{display:flex;gap:2px;flex-shrink:0}
 .p-tab{
   position:relative;
   padding:16px 20px;
@@ -788,12 +787,11 @@ section.tight{padding:clamp(44px,5.5vw,72px) 0}
 
 .p-tabs-actions{display:flex;gap:8px;align-items:center;flex-shrink:0;padding:0 4px}
 
-/* Panels */
+/* panels */
 .p-main{margin-top:clamp(24px,3vw,40px)}
 .p-panel{display:none}
 .p-panel.active{display:block;animation:pageIn .5s var(--ease-out)}
 
-/* Section head inside profile panels */
 .ov-section{margin-bottom:56px}
 .ov-section:last-child{margin-bottom:0}
 .ov-section-head{
@@ -823,14 +821,14 @@ section.tight{padding:clamp(44px,5.5vw,72px) 0}
 .p-head p{color:var(--ink-mute);font-size:14px;margin-top:4px;max-width:600px}
 .p-head .p-head-actions{display:flex;gap:10px;flex-wrap:wrap}
 
-/* Fresh posts — 2 cols */
-.fresh-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:20px}
+/* FRESH POSTS — 5 in a row, smaller */
+.fresh-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:14px}
 .fresh-card{
-  padding:20px;border-radius:var(--r-l);
+  padding:12px;border-radius:var(--r-m);
   background:linear-gradient(160deg,rgba(20,14,38,.9),rgba(11,7,22,.96));
   border:1px solid rgba(201,169,97,.22);
   transition:transform .4s var(--ease-out),border-color .4s ease,box-shadow .4s ease;
-  display:flex;flex-direction:column;gap:14px;
+  display:flex;flex-direction:column;gap:10px;
   cursor:pointer;
   position:relative;overflow:hidden;
 }
@@ -844,7 +842,7 @@ section.tight{padding:clamp(44px,5.5vw,72px) 0}
   box-shadow:var(--shadow-hover);
 }
 .fresh-img{
-  aspect-ratio:1;border-radius:10px;
+  aspect-ratio:1;border-radius:8px;
   background:radial-gradient(ellipse at 50% 40%,rgba(201,169,97,.16),transparent 70%),linear-gradient(165deg,#1e1636,#0a0716);
   border:1px solid rgba(201,169,97,.28);
   display:grid;place-items:center;position:relative;overflow:hidden;
@@ -852,22 +850,22 @@ section.tight{padding:clamp(44px,5.5vw,72px) 0}
 .fresh-img svg{width:76%;height:76%;transition:transform .7s var(--ease-out)}
 .fresh-card:hover .fresh-img svg{transform:scale(1.06)}
 .fresh-tag{
-  position:absolute;top:12px;right:12px;
-  font-family:'Manrope',sans-serif;font-size:10px;letter-spacing:.2em;text-transform:uppercase;
-  padding:5px 10px;border-radius:4px;
+  position:absolute;top:8px;right:8px;
+  font-family:'Manrope',sans-serif;font-size:8.5px;letter-spacing:.18em;text-transform:uppercase;
+  padding:3px 8px;border-radius:3px;
   background:rgba(4,2,7,.8);border:1px solid rgba(201,169,97,.45);
   color:var(--gold-glow);font-weight:700;
 }
-.fresh-card h4{font-size:20px;font-weight:600;line-height:1.2}
-.fresh-card p{font-size:13.5px;color:var(--ink-soft);line-height:1.6;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
-.fresh-foot{display:flex;justify-content:space-between;align-items:center;padding-top:12px;border-top:1px solid rgba(201,169,97,.14);margin-top:auto}
-.fresh-foot .stats{display:flex;gap:16px}
+.fresh-card h4{font-size:15px;font-weight:600;line-height:1.25;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.fresh-card p{font-size:12px;color:var(--ink-soft);line-height:1.5;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;margin:0}
+.fresh-foot{display:flex;justify-content:space-between;align-items:center;padding-top:8px;border-top:1px solid rgba(201,169,97,.12);margin-top:auto}
+.fresh-foot .stats{display:flex;gap:10px}
 .fresh-foot .stats span{
-  font-family:'Manrope',sans-serif;font-size:12px;
-  color:var(--ink-mute);display:inline-flex;align-items:center;gap:5px;font-weight:500;
+  font-family:'Manrope',sans-serif;font-size:10.5px;
+  color:var(--ink-mute);display:inline-flex;align-items:center;gap:4px;font-weight:500;
 }
-.fresh-foot .stats svg{width:13px;height:13px;stroke:var(--gold-deep)}
-.fresh-foot .when{font-family:'Manrope',sans-serif;font-size:11px;color:var(--ink-mute);letter-spacing:.04em;font-weight:500}
+.fresh-foot .stats svg{width:11px;height:11px;stroke:var(--gold-deep)}
+.fresh-foot .when{font-family:'Manrope',sans-serif;font-size:10px;color:var(--ink-mute);letter-spacing:.02em;font-weight:500;white-space:nowrap}
 
 /* Popular — horizontal */
 .pop-scroll{
@@ -1087,6 +1085,7 @@ section.tight{padding:clamp(44px,5.5vw,72px) 0}
   .trust-mini{grid-template-columns:repeat(2,1fr)}
   .pf-grid{grid-template-columns:repeat(2,1fr)}
   .ov-pf{grid-template-columns:repeat(3,1fr)}
+  .fresh-grid{grid-template-columns:repeat(4,1fr)}
 }
 @media (max-width:1100px){
   .nav{display:none}
@@ -1097,14 +1096,14 @@ section.tight{padding:clamp(44px,5.5vw,72px) 0}
   .events-grid{grid-template-columns:1fr}
   .leader-grid{grid-template-columns:1fr}
   .footer-grid{grid-template-columns:1fr 1fr;gap:40px}
-  .fresh-grid{grid-template-columns:1fr}
   .order-row{grid-template-columns:80px 1fr auto;gap:16px;padding:14px}
   .order-thumb{width:80px;height:80px}
   .order-status{grid-column:1 / -1;justify-self:start;margin-top:4px}
   .ppost-grid{grid-template-columns:1fr}
   .ov-pf{grid-template-columns:repeat(2,1fr)}
-  .p-identity{grid-template-columns:1fr;gap:16px}
-  .p-identity-actions{justify-content:flex-start}
+  .p-identity{grid-template-columns:auto 1fr;gap:16px;align-items:flex-start}
+  .p-identity-actions{grid-column:1 / -1;justify-content:flex-start;align-self:auto;margin-top:4px}
+  .fresh-grid{grid-template-columns:repeat(3,1fr)}
 }
 @media (max-width:768px){
   section{padding:60px 0}
@@ -1127,10 +1126,11 @@ section.tight{padding:clamp(44px,5.5vw,72px) 0}
   .order-thumb{width:64px;height:64px}
   .order-price{grid-column:1 / -1;text-align:left}
   .p-tabs-actions{display:none}
-  .p-identity-stats{gap:20px}
+  .p-id-stats{gap:16px}
   .p-banner-actions{top:12px;right:12px}
   .p-banner-btn span{display:none}
   .p-banner-btn{padding:9px 10px}
+  .fresh-grid{grid-template-columns:repeat(2,1fr)}
 }
 @media (max-width:480px){
   body{font-size:15px}
@@ -1143,6 +1143,12 @@ section.tight{padding:clamp(44px,5.5vw,72px) 0}
   .post-thumb{aspect-ratio:16/10}
   .pf-grid{grid-template-columns:1fr}
   .ov-pf{grid-template-columns:1fr}
+  .p-identity{grid-template-columns:1fr}
+  .p-identity .p-ava-wrap{margin:0 auto}
+  .p-id-text{text-align:center}
+  .p-id-stats{justify-content:center}
+  .p-identity-actions{justify-content:center}
+  .fresh-grid{grid-template-columns:1fr}
 }
 
 @media (prefers-reduced-motion:reduce){
@@ -1675,7 +1681,7 @@ section.tight{padding:clamp(44px,5.5vw,72px) 0}
 </main>
 
 <!-- ============================================================
-     PAGE: PROFILE — banner + avatar + horizontal tabs
+     PAGE: PROFILE — banner + avatar bottom-left + name right
      ============================================================ -->
 <main id="page-profile" class="page">
 
@@ -1691,11 +1697,8 @@ section.tight{padding:clamp(44px,5.5vw,72px) 0}
               <stop offset="100%" stop-color="#f6e5b4" stop-opacity="0"/>
             </radialGradient>
           </defs>
-          <!-- soft glow -->
           <circle cx="200" cy="80" r="200" fill="url(#bgGlow)"/>
           <circle cx="640" cy="240" r="180" fill="url(#bgGlow)" opacity=".5"/>
-
-          <!-- constellations -->
           <g fill="none" stroke="#f6e5b4" stroke-width=".8" opacity=".8">
             <path d="M60 60 L120 40 L180 70 L140 120 L80 110 Z"/>
             <path d="M640 80 L700 60 L740 100 L720 150 L660 140"/>
@@ -1737,29 +1740,32 @@ section.tight{padding:clamp(44px,5.5vw,72px) 0}
           <span>Оформление</span>
         </button>
       </div>
-
-      <div class="p-banner-avatar">
-        XVII
-        <span class="status"></span>
-        <button class="edit-ava" title="Сменить аватар">
-          <svg><use href="#i-image"/></svg>
-        </button>
-      </div>
     </div>
 
-    <!-- IDENTITY -->
+    <!-- IDENTITY: avatar left (pulled up), name right -->
     <div class="p-identity">
-      <div>
+      <div class="p-ava-wrap">
+        <div class="p-ava">
+          XVII
+          <span class="status"></span>
+          <button class="edit-ava" title="Сменить аватар">
+            <svg><use href="#i-image"/></svg>
+          </button>
+        </div>
+      </div>
+
+      <div class="p-id-text">
         <h1>Sunny Art</h1>
         <div class="handle">@sunny_art · XVII · художник</div>
         <p class="bio">Портреты и YCH. Тёмное фэнтези, сепия, гравировки. Работаю через Escrow. Принимаю заказы на OC и адопты.</p>
-        <div class="p-identity-stats">
+        <div class="p-id-stats">
           <div>Работ<b>248</b></div>
           <div>Заказов<b>132</b></div>
           <div>Рейтинг<b>4.9</b></div>
           <div>Подписчиков<b>8 421</b></div>
         </div>
       </div>
+
       <div class="p-identity-actions">
         <button class="btn btn-primary btn-sm magnetic">Открыть слот</button>
         <button class="btn btn-ghost btn-sm magnetic">Написать</button>
@@ -1797,7 +1803,7 @@ section.tight{padding:clamp(44px,5.5vw,72px) 0}
       <!-- OVERVIEW -->
       <section class="p-panel active" data-panel="overview">
 
-        <!-- FRESH POSTS -->
+        <!-- FRESH POSTS — 5 in a row -->
         <div class="ov-section">
           <div class="ov-section-head">
             <h3>Свежие посты</h3>
@@ -1805,28 +1811,29 @@ section.tight{padding:clamp(44px,5.5vw,72px) 0}
           </div>
           <div class="fresh-grid">
             <article class="fresh-card">
-              <div class="fresh-img"><svg viewBox="0 0 200 260"><use href="#s-star"/></svg><span class="fresh-tag">Новая работа</span></div>
+              <div class="fresh-img"><svg viewBox="0 0 200 260"><use href="#s-star"/></svg><span class="fresh-tag">Новая</span></div>
               <h4>Astral Child — финал</h4>
-              <p>18 часов, 42 слоя. Золото, сепия и звёзды.</p>
-              <div class="fresh-foot">
-                <div class="stats">
-                  <span><svg viewBox="0 0 24 24"><use href="#i-heart"/></svg>124</span>
-                  <span><svg viewBox="0 0 24 24"><use href="#i-comment"/></svg>18</span>
-                </div>
-                <span class="when">2 мин назад</span>
-              </div>
+              <div class="fresh-foot"><div class="stats"><span><svg viewBox="0 0 24 24"><use href="#i-heart"/></svg>124</span><span><svg viewBox="0 0 24 24"><use href="#i-comment"/></svg>18</span></div><span class="when">2 мин</span></div>
             </article>
             <article class="fresh-card">
-              <div class="fresh-img"><svg viewBox="0 0 200 260"><use href="#s-moon"/></svg><span class="fresh-tag">Открыт слот</span></div>
+              <div class="fresh-img"><svg viewBox="0 0 200 260"><use href="#s-moon"/></svg><span class="fresh-tag">Слот</span></div>
               <h4>Lunar Paimon — превью</h4>
-              <p>4 слота на портреты. Срок 2 недели.</p>
-              <div class="fresh-foot">
-                <div class="stats">
-                  <span><svg viewBox="0 0 24 24"><use href="#i-heart"/></svg>312</span>
-                  <span><svg viewBox="0 0 24 24"><use href="#i-comment"/></svg>46</span>
-                </div>
-                <span class="when">14 мин назад</span>
-              </div>
+              <div class="fresh-foot"><div class="stats"><span><svg viewBox="0 0 24 24"><use href="#i-heart"/></svg>312</span><span><svg viewBox="0 0 24 24"><use href="#i-comment"/></svg>46</span></div><span class="when">14 мин</span></div>
+            </article>
+            <article class="fresh-card">
+              <div class="fresh-img"><svg viewBox="0 0 200 260"><use href="#s-cup"/></svg><span class="fresh-tag">YCH</span></div>
+              <h4>Chalice — YCH Cat</h4>
+              <div class="fresh-foot"><div class="stats"><span><svg viewBox="0 0 24 24"><use href="#i-heart"/></svg>87</span><span><svg viewBox="0 0 24 24"><use href="#i-comment"/></svg>12</span></div><span class="when">1 ч</span></div>
+            </article>
+            <article class="fresh-card">
+              <div class="fresh-img"><svg viewBox="0 0 200 260"><use href="#s-sun"/></svg><span class="fresh-tag">Анонс</span></div>
+              <h4>Mermay 2026 — приём</h4>
+              <div class="fresh-foot"><div class="stats"><span><svg viewBox="0 0 24 24"><use href="#i-heart"/></svg>203</span><span><svg viewBox="0 0 24 24"><use href="#i-comment"/></svg>31</span></div><span class="when">3 ч</span></div>
+            </article>
+            <article class="fresh-card">
+              <div class="fresh-img"><svg viewBox="0 0 200 260"><use href="#s-eye"/></svg><span class="fresh-tag">Live2D</span></div>
+              <h4>Oracle Eye — риг</h4>
+              <div class="fresh-foot"><div class="stats"><span><svg viewBox="0 0 24 24"><use href="#i-heart"/></svg>156</span><span><svg viewBox="0 0 24 24"><use href="#i-comment"/></svg>24</span></div><span class="when">5 ч</span></div>
             </article>
           </div>
         </div>
@@ -2119,7 +2126,7 @@ window.addEventListener('load', ()=>{
   tick();
   document.addEventListener('mousedown',()=>c.classList.add('click'));
   document.addEventListener('mouseup',()=>c.classList.remove('click'));
-  const t='a,button,.auc-card,.gm-item,.artist-card,.cat-card,.post-card,.event-card,.side-card,.logo,.avatar,.icon-btn,.wallet,.carousel-btn,.pf-item,.article-card,.order-row,.ppost,.p-tab,.am-item,.fresh-card,.pop-item,.ov-pf-item,.p-banner-btn';
+  const t='a,button,.auc-card,.gm-item,.artist-card,.cat-card,.post-card,.event-card,.side-card,.logo,.avatar,.icon-btn,.wallet,.carousel-btn,.pf-item,.article-card,.order-row,.ppost,.p-tab,.am-item,.fresh-card,.pop-item,.ov-pf-item,.p-banner-btn,.edit-ava';
   document.querySelectorAll(t).forEach(el=>{
     el.addEventListener('mouseenter',()=>c.classList.add('hover'));
     el.addEventListener('mouseleave',()=>c.classList.remove('hover'));
@@ -2577,7 +2584,7 @@ window.addEventListener('load', ()=>{
   });
 })();
 
-/* PROFILE PANELS — через горизонтальные табы и ссылки «Все» */
+/* PROFILE PANELS via tabs and links */
 (()=>{
   document.querySelectorAll('[data-pnav]').forEach(btn=>{
     btn.addEventListener('click', e=>{
